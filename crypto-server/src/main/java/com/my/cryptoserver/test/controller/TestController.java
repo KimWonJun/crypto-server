@@ -2,8 +2,8 @@ package com.my.cryptoserver.test.controller;
 
 import com.my.cryptoserver.test.dto.TestDTO;
 import com.my.cryptoserver.test.service.TestService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +17,18 @@ import java.util.List;
 @RequestMapping(value="/test")
 public class TestController
 {
+    private static final Logger log = LogManager.getLogger(TestController.class);
+
     @Autowired
     private TestService testService;
-
-    private static final Logger log = LoggerFactory.getLogger(TestController.class);
 
     @RequestMapping(value="/user", method= RequestMethod.GET)
     public ResponseEntity<?> selectUserList() throws Exception
     {
         List<TestDTO> testList = testService.selectUserList();
-        log.debug("testList : {}", testList);
+        log.info("info log : {}", testList);
+        log.debug("debug log");
+        log.error("error log");
 
         return new ResponseEntity<>(testList, HttpStatus.OK);
     }

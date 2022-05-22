@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="TRACE">
+
+    <Properties>
+        <Property name="logFileName">crypto-server</Property>
+        <Property name="consoleLayout">%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable</Property>
+        <Property name="fileLayout">%d [%t] %-5level %c(%M:%L) - %m%n</Property>
+
+        <!-- package별 로그레벨 설정 -->
+        <Property name="comm.loglevel">debug</Property>
+        <Property name="commMapper.loglevel">info</Property>
+        <Property name="cryptoserver.loglevel">debug</Property>
+        <Property name="cryptoserverMapper.loglevel">info</Property>
+        <Property name="spring.loglevel">info</Property>
+        <Property name="spring.jdbc.loglevel">info</Property>
+        <Property name="ibatis.loglevel">info</Property>
+        <Property name="quartz.loglevel">info</Property>
+
+        <Property name="jdbc.loglevel">error</Property>
+        <Property name="jdbc.sqlonly.loglevel">info</Property>
+        <Property name="jdbc.audit.loglevel">error</Property>
+        <Property name="jdbc.resultset.loglevel">error</Property>
+        <Property name="jdbc.resultsettable.loglevel">error</Property>
+        <Property name="jdbc.connection.loglevel">error</Property>
+        <Property name="jdbc.sqltiming.loglevel">error</Property>
+        <Property name="org.apache.http.loglevel">error</Property>
+
+        <Property name="root.loglevel">info</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="consoleLogger" target="SYSTEM_OUT">
+            <PatternLayout pattern="${consoleLayout}" />
+        </Console>
+        <RollingFile name="cryptoserverLogger"
+                     fileName="logs/${logFileName}.log"
+                     filePattern="logs/${logFileName}.%d{yyyy-MM-dd-hh}.log"
+                     append="true">
+            <PatternLayout>
+                <header>
+                    ${java:runtime}${sys:line.separator}${java:vm}${sys:line.separator}${java:os}${sys:line.separator}
+                </header>
+                <footer>
+                    end of file
+                </footer>
+                <pattern>${fileLayout}</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1" /><!-- 시간별 로그 파일 생성-->
+            </Policies>
+            <DefaultRolloverStrategy max="5" fileIndex="min" /><!-- 롤링 파일 5개 까지 생성 -->
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- Common -->
+        <!-- ***************************************************************************************** -->
+        <Logger name="org.apache.jsp.WEB_002dINF.views.main.biz" level="${cryptoserver.loglevel}" additivity="false">
+            <AppenderRef ref="cryptoserverLogger" />
+            <AppenderRef ref="consoleLogger" />
+        </Logger>
+        <Logger name="com.my.cryptoserver" level="${cryptoserver.loglevel}" additivity="false">
+            <AppenderRef ref="cryptoserverLogger" />
+            <AppenderRef ref="consoleLogger" />
+        </Logger>
+        <Logger name="com.deit.cryptoserver.mapper" level="${cryptoserverMapper.loglevel}" additivity="false">
+            <AppenderRef ref="cryptoserverLogger" />
+            <AppenderRef ref="consoleLogger" />
+        </Logger>
+        <!-- ***************************************************************************************** -->
+
+
+        <!-- COMMON -->
+        <!-- ***************************************************************************************** -->
+
+        <!-- spring -->
+        <Logger name="org.springframework" level="${spring.loglevel}" additivity="false">
+            <AppenderRef ref="consoleLogger" />
+        </Logger>
+        <Logger name="org.springframework.jdbc" level="${spring.jdbc.loglevel}" additivity="false">
+            <AppenderRef ref="consoleLogger" />
+        </Logger>
+        <Logger name="org.mybatis.spring.transaction" level="${spring.jdbc.loglevel}" additivity="false">
+            <AppenderRef ref="consoleLogger" />
+        </Logger>
+        <Logger name="org.mybatis.spring" level="${spring.loglevel}" additivity="false">
+            <AppenderRef ref="consoleLogger" />
+        </Logger>
+
+        <!-- ibatis -->
+        <Logger name="org.apache.ibatis" level="${ibatis.loglevel}" additivity="false">
+            <AppenderRef ref="consoleLogger" />
+        </Logger>
+
+        <!-- quartz -->
+        <Logger name="org.quartz" level="${quartz.loglevel}" additivity="false">
+            <AppenderRef ref="consoleLogger" />
+        </Logger>
+
+        <!-- jdbc -->
+        <Logger name="log4jdbc" level="${jdbc.loglevel}" additivity="false">
+            <AppenderRef ref="consoleLogger" />
+        </Logger>
+        <Logger name="jdbc" level="${jdbc.loglevel}" additivity="false">
+            <AppenderRef ref="consoleLogger" />
+        </Logger>
+        <Logger name="jdbc.sqlonly" level="${jdbc.sqlonly.loglevel}" additivity="false">
+            <AppenderRef ref="consoleLogger" />
+        </Logger>
+        <Logger name="jdbc.audit" level="${jdbc.audit.loglevel}" additivity="false">
+            <AppenderRef ref="consoleLogger" />
+        </Logger>
+        <Logger name="jdbc.resultset" level="${jdbc.resultset.loglevel}" additivity="false">
+            <AppenderRef ref="consoleLogger" />
+        </Logger>
+        <Logger name="jdbc.resultsettable" level="${jdbc.resultsettable.loglevel}" additivity="false">
+            <AppenderRef ref="consoleLogger" />
+        </Logger>
+        <Logger name="jdbc.connection" level="${jdbc.connection.loglevel}" additivity="false">
+            <AppenderRef ref="consoleLogger" />
+        </Logger>
+        <Logger name="jdbc.sqltiming" level="${jdbc.sqltiming.loglevel}" additivity="false">
+            <AppenderRef ref="consoleLogger" />
+        </Logger>
+
+        <!-- org.apache.http -->
+        <Logger name="org.apache.http" level="${org.apache.http.loglevel}" additivity="false">
+            <AppenderRef ref="consoleLogger" />
+        </Logger>
+
+        <!-- <Logger name="jdbc.sqlonly.sqlOccured" level="${jdbc.sqlonly.sqlOccured.loglevel}" additivity="false">
+            <AppenderRef ref="consoleLogger" />
+        </Logger> -->
+        <!-- ***************************************************************************************** -->
+
+        <Root level="${root.loglevel}">
+            <AppenderRef ref="consoleLogger"/>
+        </Root>
+    </Loggers>
+</Configuration>

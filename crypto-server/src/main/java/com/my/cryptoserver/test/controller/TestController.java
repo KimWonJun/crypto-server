@@ -2,6 +2,7 @@ package com.my.cryptoserver.test.controller;
 
 import com.my.cryptoserver.test.dto.TestDTO;
 import com.my.cryptoserver.test.service.TestService;
+import com.my.cryptoserver.webinf.service.WebInfService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value="/test")
@@ -21,6 +23,9 @@ public class TestController
 
     @Autowired
     private TestService testService;
+
+    @Autowired
+    private WebInfService webInfService;
 
     @RequestMapping(value="/user", method= RequestMethod.GET)
     public ResponseEntity<?> selectUserList() throws Exception
@@ -32,4 +37,13 @@ public class TestController
 
         return new ResponseEntity<>(testList, HttpStatus.OK);
     }
+
+    @RequestMapping(value="/test", method=RequestMethod.GET)
+    public ResponseEntity<?> testApi() throws Exception
+    {
+        String result = webInfService.testApi();
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 }

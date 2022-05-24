@@ -41,7 +41,59 @@ public class WebInfServiceImpl implements WebInfService
     }
 
     @Override
-    public String testApi() throws NoSuchAlgorithmException, UnsupportedEncodingException
+    public String getAllAccounts() throws NoSuchAlgorithmException, UnsupportedEncodingException
+    {
+        String accessKey = "lBTxXTh63tVEO4EkQwSutcbsURndQh52jQfpxOa0";
+        String secretKey = "jGXdrBlMrmVtJGFlA9xzktwksxDmujVD1x6XIJIU";
+        String serverUrl = "https://api.upbit.com";
+
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        String jwtToken = JWT.create()
+                .withClaim("access_key", accessKey)
+                .withClaim("nonce", UUID.randomUUID().toString())
+                .sign(algorithm);
+
+        String authenticationToken = "Bearer " + jwtToken;
+        StringBuffer result = new StringBuffer();
+
+        CloseableHttpClient client = HttpClientBuilder.create().build();
+
+        try
+        {
+            HttpGet request = new HttpGet(serverUrl + "/v1/accounts?");
+            request.setHeader("Content-Type", "application/json");
+            request.addHeader("Authorization", authenticationToken);
+
+            HttpResponse response = client.execute(request);
+            HttpEntity entity = response.getEntity();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent(), Charset.forName("UTF-8")));
+            String buffer = null;
+            while((buffer=br.readLine()) != null)
+            {
+                result.append(buffer).append("\r\n");
+            }
+            log.debug("result : {}", result);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        finally {
+            try
+            {
+                client.close();
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        return result.toString();
+    }
+
+    @Override
+    public String orderChance() throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
         String accessKey = "lBTxXTh63tVEO4EkQwSutcbsURndQh52jQfpxOa0";
         String secretKey = "jGXdrBlMrmVtJGFlA9xzktwksxDmujVD1x6XIJIU";
@@ -79,6 +131,76 @@ public class WebInfServiceImpl implements WebInfService
         try
         {
             HttpGet request = new HttpGet(serverUrl + "/v1/orders/chance?" + queryString);
+            request.setHeader("Content-Type", "application/json");
+            request.addHeader("Authorization", authenticationToken);
+
+            HttpResponse response = client.execute(request);
+            HttpEntity entity = response.getEntity();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent(), Charset.forName("UTF-8")));
+            String buffer = null;
+            while((buffer=br.readLine()) != null)
+            {
+                result.append(buffer).append("\r\n");
+            }
+            log.debug("result : {}", result);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        finally {
+            try
+            {
+                client.close();
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        return result.toString();
+    }
+
+    @Override
+    public String orderSeperate() throws NoSuchAlgorithmException, UnsupportedEncodingException
+    {
+        String accessKey = "lBTxXTh63tVEO4EkQwSutcbsURndQh52jQfpxOa0";
+        String secretKey = "jGXdrBlMrmVtJGFlA9xzktwksxDmujVD1x6XIJIU";
+        String serverUrl = "https://api.upbit.com";
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("uuid", "9ca023a5-851b-4fec-9f0a-48cd83c2eaae");
+
+        ArrayList<String> queryElements = new ArrayList<>();
+        for(Map.Entry<String, String> entity : params.entrySet())
+        {
+            queryElements.add(entity.getKey() + "=" + entity.getValue());
+        }
+
+        String queryString = String.join("&", queryElements.toArray(new String[0]));
+
+        MessageDigest md = MessageDigest.getInstance("SHA-512");
+        md.update(queryString.getBytes("UTF-8"));
+
+        String queryHash = String.format("%0128x", new BigInteger(1, md.digest()));
+
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        String jwtToken = JWT.create()
+                .withClaim("access_key", accessKey)
+                .withClaim("nonce", UUID.randomUUID().toString())
+                .withClaim("query_hash", queryHash)
+                .withClaim("query_hash_alg", "SHA512")
+                .sign(algorithm);
+
+        String authenticationToken = "Bearer " + jwtToken;
+        StringBuffer result = new StringBuffer();
+
+        CloseableHttpClient client = HttpClientBuilder.create().build();
+
+        try
+        {
+            HttpGet request = new HttpGet(serverUrl + "/v1/order?" + queryString);
             request.setHeader("Content-Type", "application/json");
             request.addHeader("Authorization", authenticationToken);
 

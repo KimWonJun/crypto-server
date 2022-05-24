@@ -38,10 +38,26 @@ public class TestController
         return new ResponseEntity<>(testList, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/test", method=RequestMethod.GET)
-    public ResponseEntity<?> testApi() throws Exception
+    @RequestMapping(value="/getAllAccounts", method=RequestMethod.GET)
+    public ResponseEntity<?> getAllAccounts() throws Exception
     {
-        String result = webInfService.testApi();
+        String result = webInfService.getAllAccounts();
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/orderChance", method=RequestMethod.GET)
+    public ResponseEntity<?> orderChance() throws Exception
+    {
+        String result = webInfService.orderChance();
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/orderSeperate", method=RequestMethod.GET)
+    public ResponseEntity<?> orderSeperate() throws Exception
+    {
+        String result = webInfService.orderSeperate();
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

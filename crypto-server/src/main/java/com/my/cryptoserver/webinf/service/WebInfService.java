@@ -12,5 +12,9 @@ public interface WebInfService
 {
     Map execHttpClient(HttpRequestBase httpRequest, WebInfDto webInfDto);
 
-    String testApi() throws NoSuchAlgorithmException, UnsupportedEncodingException;
+    String getAllAccounts() throws NoSuchAlgorithmException, UnsupportedEncodingException;
+
+    String orderChance() throws NoSuchAlgorithmException, UnsupportedEncodingException;
+
+    String orderSeperate() throws NoSuchAlgorithmException, UnsupportedEncodingException;
 }

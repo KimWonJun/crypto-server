@@ -17,4 +17,10 @@ public interface WebInfService
     String orderChance() throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
     String orderSeperate() throws NoSuchAlgorithmException, UnsupportedEncodingException;
+
+    String candleMinute() throws NoSuchAlgorithmException, UnsupportedEncodingException;
+    String candleDay() throws NoSuchAlgorithmException, UnsupportedEncodingException;
+    String candleWeek() throws NoSuchAlgorithmException, UnsupportedEncodingException;
+    String candleMonth() throws NoSuchAlgorithmException, UnsupportedEncodingException;
+
 }

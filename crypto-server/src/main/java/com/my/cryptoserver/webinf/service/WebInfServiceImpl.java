@@ -231,4 +231,24 @@ public class WebInfServiceImpl implements WebInfService
 
         return result.toString();
     }
+
+    @Override
+    public String candleMinute() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        return null;
+    }
+
+    @Override
+    public String candleDay() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        return null;
+    }
+
+    @Override
+    public String candleWeek() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        return null;
+    }
+
+    @Override
+    public String candleMonth() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        return null;
+    }
 }

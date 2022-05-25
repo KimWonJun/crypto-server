@@ -7,8 +7,6 @@
         <Property name="fileLayout">%d [%t] %-5level %c(%M:%L) - %m%n</Property>
 
         <!-- package별 로그레벨 설정 -->
-        <Property name="comm.loglevel">debug</Property>
-        <Property name="commMapper.loglevel">info</Property>
         <Property name="cryptoserver.loglevel">debug</Property>
         <Property name="cryptoserverMapper.loglevel">info</Property>
         <Property name="spring.loglevel">info</Property>

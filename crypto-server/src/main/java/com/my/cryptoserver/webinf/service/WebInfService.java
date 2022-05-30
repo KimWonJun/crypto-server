@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface WebInfService
 {
-    Map execHttpClient(HttpRequestBase httpRequest, WebInfDto webInfDto);
+    Map execHttpClient(HttpRequestBase httpRequest, WebInfDto webInfDto) throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
     String getAllAccounts() throws NoSuchAlgorithmException, UnsupportedEncodingException;
 

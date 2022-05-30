@@ -33,23 +33,67 @@ public class WebInfServiceImpl implements WebInfService
 {
     private static final Logger log = LogManager.getLogger(WebInfServiceImpl.class);
 
+    private static final String ACCESSKEY = "lBTxXTh63tVEO4EkQwSutcbsURndQh52jQfpxOa0";
+    private static final String SECRETKEY = "jGXdrBlMrmVtJGFlA9xzktwksxDmujVD1x6XIJIU";
+    private static final String SERVERURL = "https://api.upbit.com";
+
     @Override
-    public Map execHttpClient(HttpRequestBase httpRequest, WebInfDto webInfDto)
+    public Map execHttpClient(HttpRequestBase httpRequest, WebInfDto webInfDto) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
-        Map map = new HashMap<String, String>();
-        return map;
+        log.debug("execHttpClient executed");
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////
+        // Query String parameter 가 존재하는 경우
+        HashMap<String, String> params = new HashMap<>();
+
+        if(webInfDto.getQueryStringMap() != null && !webInfDto.getQueryStringMap().isEmpty())
+        {
+            Map<String, String> map = webInfDto.getQueryStringMap();
+
+            for(Map.Entry<String, String> entry : map.entrySet())
+            {
+                params.put(entry.getKey(), entry.getValue());
+            }
+        }
+
+        CloseableHttpClient client = HttpClientBuilder.create().build();
+
+        // params.put("market", "KRW-BTC");
+
+        ArrayList<String> queryElements = new ArrayList<>();
+        for(Map.Entry<String, String> entity : params.entrySet())
+        {
+            queryElements.add(entity.getKey() + "=" + entity.getValue());
+        }
+
+        String queryString = String.join("&", queryElements.toArray(new String[0]));
+
+        MessageDigest md = MessageDigest.getInstance("SHA-512");
+        md.update(queryString.getBytes("UTF-8"));
+
+        String queryHash = String.format("%0128x", new BigInteger(1, md.digest()));
+
+        Algorithm algorithm = Algorithm.HMAC256(SECRETKEY);
+        String jwtToken = JWT.create()
+                .withClaim("access_key", ACCESSKEY)
+                .withClaim("nonce", UUID.randomUUID().toString())
+                .withClaim("query_hash", queryHash)
+                .withClaim("query_hash_alg", "SHA512")
+                .sign(algorithm);
+
+        String authenticationToken = "Bearer " + jwtToken;
+        StringBuffer result = new StringBuffer();
+
+        Map retMap = new HashMap();
+        return retMap;
     }
 
     @Override
     public String getAllAccounts() throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
-        String accessKey = "lBTxXTh63tVEO4EkQwSutcbsURndQh52jQfpxOa0";
-        String secretKey = "jGXdrBlMrmVtJGFlA9xzktwksxDmujVD1x6XIJIU";
-        String serverUrl = "https://api.upbit.com";
-
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        Algorithm algorithm = Algorithm.HMAC256(SECRETKEY);
         String jwtToken = JWT.create()
-                .withClaim("access_key", accessKey)
+                .withClaim("access_key", ACCESSKEY)
                 .withClaim("nonce", UUID.randomUUID().toString())
                 .sign(algorithm);
 
@@ -60,7 +104,7 @@ public class WebInfServiceImpl implements WebInfService
 
         try
         {
-            HttpGet request = new HttpGet(serverUrl + "/v1/accounts?");
+            HttpGet request = new HttpGet(SERVERURL + "/v1/accounts?");
             request.setHeader("Content-Type", "application/json");
             request.addHeader("Authorization", authenticationToken);
 
@@ -95,10 +139,6 @@ public class WebInfServiceImpl implements WebInfService
     @Override
     public String orderChance() throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
-        String accessKey = "lBTxXTh63tVEO4EkQwSutcbsURndQh52jQfpxOa0";
-        String secretKey = "jGXdrBlMrmVtJGFlA9xzktwksxDmujVD1x6XIJIU";
-        String serverUrl = "https://api.upbit.com";
-
         HashMap<String, String> params = new HashMap<>();
         params.put("market", "KRW-BTC");
 
@@ -115,9 +155,9 @@ public class WebInfServiceImpl implements WebInfService
 
         String queryHash = String.format("%0128x", new BigInteger(1, md.digest()));
 
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        Algorithm algorithm = Algorithm.HMAC256(SECRETKEY);
         String jwtToken = JWT.create()
-                .withClaim("access_key", accessKey)
+                .withClaim("access_key", ACCESSKEY)
                 .withClaim("nonce", UUID.randomUUID().toString())
                 .withClaim("query_hash", queryHash)
                 .withClaim("query_hash_alg", "SHA512")
@@ -130,7 +170,7 @@ public class WebInfServiceImpl implements WebInfService
 
         try
         {
-            HttpGet request = new HttpGet(serverUrl + "/v1/orders/chance?" + queryString);
+            HttpGet request = new HttpGet(SERVERURL + "/v1/orders/chance?" + queryString);
             request.setHeader("Content-Type", "application/json");
             request.addHeader("Authorization", authenticationToken);
 
@@ -165,10 +205,6 @@ public class WebInfServiceImpl implements WebInfService
     @Override
     public String orderSeperate() throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
-        String accessKey = "lBTxXTh63tVEO4EkQwSutcbsURndQh52jQfpxOa0";
-        String secretKey = "jGXdrBlMrmVtJGFlA9xzktwksxDmujVD1x6XIJIU";
-        String serverUrl = "https://api.upbit.com";
-
         HashMap<String, String> params = new HashMap<>();
         params.put("uuid", "9ca023a5-851b-4fec-9f0a-48cd83c2eaae");
 
@@ -185,9 +221,9 @@ public class WebInfServiceImpl implements WebInfService
 
         String queryHash = String.format("%0128x", new BigInteger(1, md.digest()));
 
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        Algorithm algorithm = Algorithm.HMAC256(SECRETKEY);
         String jwtToken = JWT.create()
-                .withClaim("access_key", accessKey)
+                .withClaim("access_key", ACCESSKEY)
                 .withClaim("nonce", UUID.randomUUID().toString())
                 .withClaim("query_hash", queryHash)
                 .withClaim("query_hash_alg", "SHA512")
@@ -200,7 +236,7 @@ public class WebInfServiceImpl implements WebInfService
 
         try
         {
-            HttpGet request = new HttpGet(serverUrl + "/v1/order?" + queryString);
+            HttpGet request = new HttpGet(SERVERURL + "/v1/order?" + queryString);
             request.setHeader("Content-Type", "application/json");
             request.addHeader("Authorization", authenticationToken);
 
@@ -230,6 +266,54 @@ public class WebInfServiceImpl implements WebInfService
         }
 
         return result.toString();
+    }
+
+    public Map postOrders() throws NoSuchAlgorithmException, UnsupportedEncodingException
+    {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("market", "KRW-BTC");
+        params.put("side", "bid");
+        params.put("volume", "0.01");
+        params.put("price", "100");
+        params.put("ord_type", "limit");
+
+        ArrayList<String> queryElements = new ArrayList<>();
+        for(Map.Entry<String, String> entity : params.entrySet()) {
+            queryElements.add(entity.getKey() + "=" + entity.getValue());
+        }
+
+        String queryString = String.join("&", queryElements.toArray(new String[0]));
+
+        MessageDigest md = MessageDigest.getInstance("SHA-512");
+        md.update(queryString.getBytes("UTF-8"));
+
+        String queryHash = String.format("%0128x", new BigInteger(1, md.digest()));
+
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        String jwtToken = JWT.create()
+                .withClaim("access_key", accessKey)
+                .withClaim("nonce", UUID.randomUUID().toString())
+                .withClaim("query_hash", queryHash)
+                .withClaim("query_hash_alg", "SHA512")
+                .sign(algorithm);
+
+        String authenticationToken = "Bearer " + jwtToken;
+
+        try {
+            HttpClient client = HttpClientBuilder.create().build();
+            HttpPost request = new HttpPost(serverUrl + "/v1/orders");
+            request.setHeader("Content-Type", "application/json");
+            request.addHeader("Authorization", authenticationToken);
+            request.setEntity(new StringEntity(new Gson().toJson(params)));
+
+            HttpResponse response = client.execute(request);
+            HttpEntity entity = response.getEntity();
+
+            System.out.println(EntityUtils.toString(entity, "UTF-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override

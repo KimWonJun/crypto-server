@@ -15,8 +15,8 @@ import java.util.Map;
 public class WebInfDto
 {
     private String uri;
-    private String body;
-    private String userId;
-    private String password;
+    private String method;
+    private Map queryStringMap;
+    private Map body;
     private List<Map> extraHeaderInfoList;
 }

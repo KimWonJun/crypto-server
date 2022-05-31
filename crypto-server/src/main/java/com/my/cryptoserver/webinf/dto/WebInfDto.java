@@ -18,5 +18,5 @@ public class WebInfDto
     private String method;
     private Map queryStringMap;
     private Map body;
-    private List<Map> extraHeaderInfoList;
+    private Map extraHeaderInfo;
 }

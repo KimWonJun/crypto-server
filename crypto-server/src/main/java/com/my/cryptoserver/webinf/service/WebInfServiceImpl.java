@@ -6,8 +6,7 @@ import com.my.cryptoserver.webinf.dto.WebInfDto;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.methods.*;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
@@ -38,11 +37,94 @@ public class WebInfServiceImpl implements WebInfService
     private static final String SERVERURL = "https://api.upbit.com";
 
     @Override
-    public Map execHttpClient(HttpRequestBase httpRequest, WebInfDto webInfDto) throws NoSuchAlgorithmException, UnsupportedEncodingException
-    {
+    public Map execHttpGet(WebInfDto remoteVO) {
+        HttpGet httpRequest = new HttpGet();
+
+        Map retMap = new HashMap();
+
+        try {
+            retMap = execHttpClient(httpRequest, remoteVO);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return retMap;
+    }
+
+    @Override
+    public Map execHttpPost(WebInfDto remoteVO) {
+        HttpPost httpRequest = new HttpPost();
+
+        /** body 설정 */
+//        if( !StringUtil.isNull(remoteVO.getBody()) ) {
+//            HttpEntity entity = new ByteArrayEntity( remoteVO.getBody().getBytes(StandardCharsets.UTF_8) );
+//            httpRequest.setEntity(entity);
+//
+//            log.debug("HttpEntity: {}", entity);
+//
+//        }
+
+        Map retMap = new HashMap();
+
+        try {
+            retMap = execHttpClient(httpRequest, remoteVO);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return retMap;
+    }
+
+    @Override
+    public Map execHttpPut(WebInfDto remoteVO) {
+        HttpPut httpRequest = new HttpPut();
+
+        /** body 설정 */
+//        if( !StringUtil.isNull(remoteVO.getBody()) ) {
+//            HttpEntity entity = new ByteArrayEntity( remoteVO.getBody().getBytes(StandardCharsets.UTF_8) );
+//            httpRequest.setEntity(entity);
+//
+//            log.debug("HttpEntity: {}", entity);
+//
+//        }
+
+        Map retMap = new HashMap();
+
+        try {
+            retMap = execHttpClient(httpRequest, remoteVO);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return retMap;
+    }
+
+    @Override
+    public Map execHttpDelete(WebInfDto remoteVO) {
+        HttpDelete httpRequest = new HttpDelete();
+
+        Map retMap = new HashMap();
+
+        try {
+            retMap = execHttpClient(httpRequest, remoteVO);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return retMap;
+    }
+
+    private Map execHttpClient(HttpRequestBase httpRequest, WebInfDto webInfDto) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         log.debug("execHttpClient executed");
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////
         // Query String parameter 가 존재하는 경우
         HashMap<String, String> params = new HashMap<>();
 
@@ -82,7 +164,21 @@ public class WebInfServiceImpl implements WebInfService
                 .sign(algorithm);
 
         String authenticationToken = "Bearer " + jwtToken;
-        StringBuffer result = new StringBuffer();
+
+        try {
+            HttpClient client = HttpClientBuilder.create().build();
+            HttpPost request = new HttpPost(SERVERURL + "/v1/orders");
+            request.setHeader("Content-Type", "application/json");
+            request.addHeader("Authorization", authenticationToken);
+            request.setEntity(new StringEntity(new Gson().toJson(params)));
+
+            HttpResponse response = client.execute(request);
+            HttpEntity entity = response.getEntity();
+
+            System.out.println(EntityUtils.toString(entity, "UTF-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Map retMap = new HashMap();
         return retMap;
@@ -289,9 +385,9 @@ public class WebInfServiceImpl implements WebInfService
 
         String queryHash = String.format("%0128x", new BigInteger(1, md.digest()));
 
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        Algorithm algorithm = Algorithm.HMAC256(SECRETKEY);
         String jwtToken = JWT.create()
-                .withClaim("access_key", accessKey)
+                .withClaim("access_key", ACCESSKEY)
                 .withClaim("nonce", UUID.randomUUID().toString())
                 .withClaim("query_hash", queryHash)
                 .withClaim("query_hash_alg", "SHA512")

@@ -2,11 +2,13 @@ package com.my.cryptoserver.webinf.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.google.gson.Gson;
 import com.my.cryptoserver.webinf.dto.WebInfDto;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
@@ -19,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -43,7 +46,7 @@ public class WebInfServiceImpl implements WebInfService
         Map retMap = new HashMap();
 
         try {
-            retMap = execHttpClient(httpRequest, remoteVO);
+            retMap = getExecHttpClient(httpRequest, remoteVO);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
@@ -58,18 +61,18 @@ public class WebInfServiceImpl implements WebInfService
         HttpPost httpRequest = new HttpPost();
 
         /** body 설정 */
-//        if( !StringUtil.isNull(remoteVO.getBody()) ) {
-//            HttpEntity entity = new ByteArrayEntity( remoteVO.getBody().getBytes(StandardCharsets.UTF_8) );
-//            httpRequest.setEntity(entity);
-//
-//            log.debug("HttpEntity: {}", entity);
-//
-//        }
+        if( !StringUtil.isNull(remoteVO.getBody()) ) {
+            HttpEntity entity = new ByteArrayEntity( remoteVO.getBody().getBytes(StandardCharsets.UTF_8) );
+            httpRequest.setEntity(entity);
+
+            log.debug("HttpEntity: {}", entity);
+
+        }
 
         Map retMap = new HashMap();
 
         try {
-            retMap = execHttpClient(httpRequest, remoteVO);
+            retMap = getExecHttpClient(httpRequest, remoteVO);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
@@ -95,7 +98,7 @@ public class WebInfServiceImpl implements WebInfService
         Map retMap = new HashMap();
 
         try {
-            retMap = execHttpClient(httpRequest, remoteVO);
+            retMap = getExecHttpClient(httpRequest, remoteVO);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
@@ -112,7 +115,7 @@ public class WebInfServiceImpl implements WebInfService
         Map retMap = new HashMap();
 
         try {
-            retMap = execHttpClient(httpRequest, remoteVO);
+            retMap = getExecHttpClient(httpRequest, remoteVO);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
@@ -122,25 +125,21 @@ public class WebInfServiceImpl implements WebInfService
         return retMap;
     }
 
-    private Map execHttpClient(HttpRequestBase httpRequest, WebInfDto webInfDto) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    private Map getExecHttpClient(WebInfDto webInfDto) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         log.debug("execHttpClient executed");
 
         // Query String parameter 가 존재하는 경우
         HashMap<String, String> params = new HashMap<>();
 
-        if(webInfDto.getQueryStringMap() != null && !webInfDto.getQueryStringMap().isEmpty())
+        if(webInfDto.getParamMap() != null && !webInfDto.getParamMap().isEmpty())
         {
-            Map<String, String> map = webInfDto.getQueryStringMap();
+            Map<String, String> map = webInfDto.getParamMap();
 
             for(Map.Entry<String, String> entry : map.entrySet())
             {
                 params.put(entry.getKey(), entry.getValue());
             }
         }
-
-        CloseableHttpClient client = HttpClientBuilder.create().build();
-
-        // params.put("market", "KRW-BTC");
 
         ArrayList<String> queryElements = new ArrayList<>();
         for(Map.Entry<String, String> entity : params.entrySet())
@@ -165,17 +164,53 @@ public class WebInfServiceImpl implements WebInfService
 
         String authenticationToken = "Bearer " + jwtToken;
 
+        CloseableHttpClient client = HttpClientBuilder.create().build();
+        HttpResponse response = null;
+        HttpEntity entity = null;
+
+        switch(webInfDto.getMethod())
+        {
+            case "GET":
+                try
+                {
+                    HttpGet getRequest = new HttpGet(SERVERURL + "/v1/accounts?");
+                    getRequest.setHeader("Content-Type", "application/json");
+                    getRequest.addHeader("Authorization", authenticationToken);
+
+                    response = client.execute(getRequest);
+                    entity = response.getEntity();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+                break;
+
+            case "POST":
+                try {
+                    HttpPost postRequest = new HttpPost(SERVERURL + webInfDto.getUri());
+                    postRequest.setHeader("Content-Type", "application/json");
+                    postRequest.addHeader("Authorization", authenticationToken);
+                    postRequest.setEntity(new StringEntity(new Gson().toJson(params)));
+
+                    response = client.execute(postRequest);
+                    entity = response.getEntity();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+                break;
+
+            case "PUT":
+                break;
+
+            case "DELETE":
+                break;
+        }
+
         try {
-            HttpClient client = HttpClientBuilder.create().build();
-            HttpPost request = new HttpPost(SERVERURL + "/v1/orders");
-            request.setHeader("Content-Type", "application/json");
-            request.addHeader("Authorization", authenticationToken);
-            request.setEntity(new StringEntity(new Gson().toJson(params)));
-
-            HttpResponse response = client.execute(request);
-            HttpEntity entity = response.getEntity();
-
-            System.out.println(EntityUtils.toString(entity, "UTF-8"));
+            log.debug(EntityUtils.toString(entity, "UTF-8"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -273,13 +308,6 @@ public class WebInfServiceImpl implements WebInfService
             HttpResponse response = client.execute(request);
             HttpEntity entity = response.getEntity();
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent(), Charset.forName("UTF-8")));
-            String buffer = null;
-            while((buffer=br.readLine()) != null)
-            {
-                result.append(buffer).append("\r\n");
-            }
-            log.debug("result : {}", result);
         }
         catch (IOException e)
         {

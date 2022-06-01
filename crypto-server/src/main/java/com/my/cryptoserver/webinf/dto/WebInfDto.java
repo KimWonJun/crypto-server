@@ -16,7 +16,7 @@ public class WebInfDto
 {
     private String uri;
     private String method;
-    private Map queryStringMap;
-    private Map body;
+    private Map paramMap;
+    private Map entityMap;
     private Map extraHeaderInfo;
 }

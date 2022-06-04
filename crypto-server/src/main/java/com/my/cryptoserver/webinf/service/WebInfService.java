@@ -10,14 +10,6 @@ import java.util.Map;
 
 public interface WebInfService
 {
-    Map execHttpGet(WebInfDto remoteVO);
-
-    Map execHttpPost(WebInfDto remoteVO);
-
-    Map execHttpPut(WebInfDto remoteVO);
-
-    Map execHttpDelete(WebInfDto remoteVO);
-
     String getAllAccounts() throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
     String orderChance() throws NoSuchAlgorithmException, UnsupportedEncodingException;

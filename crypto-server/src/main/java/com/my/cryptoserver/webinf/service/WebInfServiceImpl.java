@@ -39,94 +39,10 @@ public class WebInfServiceImpl implements WebInfService
     private static final String SECRETKEY = "jGXdrBlMrmVtJGFlA9xzktwksxDmujVD1x6XIJIU";
     private static final String SERVERURL = "https://api.upbit.com";
 
-    @Override
-    public Map execHttpGet(WebInfDto remoteVO) {
-        HttpGet httpRequest = new HttpGet();
-
-        Map retMap = new HashMap();
-
-        try {
-            retMap = getExecHttpClient(httpRequest, remoteVO);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        return retMap;
-    }
-
-    @Override
-    public Map execHttpPost(WebInfDto remoteVO) {
-        HttpPost httpRequest = new HttpPost();
-
-        /** body 설정 */
-        if( !StringUtil.isNull(remoteVO.getBody()) ) {
-            HttpEntity entity = new ByteArrayEntity( remoteVO.getBody().getBytes(StandardCharsets.UTF_8) );
-            httpRequest.setEntity(entity);
-
-            log.debug("HttpEntity: {}", entity);
-
-        }
-
-        Map retMap = new HashMap();
-
-        try {
-            retMap = getExecHttpClient(httpRequest, remoteVO);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        return retMap;
-    }
-
-    @Override
-    public Map execHttpPut(WebInfDto remoteVO) {
-        HttpPut httpRequest = new HttpPut();
-
-        /** body 설정 */
-//        if( !StringUtil.isNull(remoteVO.getBody()) ) {
-//            HttpEntity entity = new ByteArrayEntity( remoteVO.getBody().getBytes(StandardCharsets.UTF_8) );
-//            httpRequest.setEntity(entity);
-//
-//            log.debug("HttpEntity: {}", entity);
-//
-//        }
-
-        Map retMap = new HashMap();
-
-        try {
-            retMap = getExecHttpClient(httpRequest, remoteVO);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        return retMap;
-    }
-
-    @Override
-    public Map execHttpDelete(WebInfDto remoteVO) {
-        HttpDelete httpRequest = new HttpDelete();
-
-        Map retMap = new HashMap();
-
-        try {
-            retMap = getExecHttpClient(httpRequest, remoteVO);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        return retMap;
-    }
-
-    private Map getExecHttpClient(WebInfDto webInfDto) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    private Map execHttpClient(WebInfDto webInfDto) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         log.debug("execHttpClient executed");
+
+        Map rtnMap = new HashMap();
 
         // Query String parameter 가 존재하는 경우
         HashMap<String, String> params = new HashMap<>();
@@ -165,7 +81,7 @@ public class WebInfServiceImpl implements WebInfService
         String authenticationToken = "Bearer " + jwtToken;
 
         CloseableHttpClient client = HttpClientBuilder.create().build();
-        HttpResponse response = null;
+        CloseableHttpResponse response = null;
         HttpEntity entity = null;
 
         switch(webInfDto.getMethod())
@@ -173,7 +89,7 @@ public class WebInfServiceImpl implements WebInfService
             case "GET":
                 try
                 {
-                    HttpGet getRequest = new HttpGet(SERVERURL + "/v1/accounts?");
+                    HttpGet getRequest = new HttpGet(SERVERURL + "/v1/accounts?" + queryString);
                     getRequest.setHeader("Content-Type", "application/json");
                     getRequest.addHeader("Authorization", authenticationToken);
 
@@ -208,6 +124,7 @@ public class WebInfServiceImpl implements WebInfService
             case "DELETE":
                 break;
         }
+        rtnMap = setResultMap(response);
 
         try {
             log.debug(EntityUtils.toString(entity, "UTF-8"));
@@ -215,8 +132,39 @@ public class WebInfServiceImpl implements WebInfService
             e.printStackTrace();
         }
 
-        Map retMap = new HashMap();
-        return retMap;
+        return rtnMap;
+    }
+
+    private Map setResultMap(CloseableHttpResponse httpResponse)
+    {
+        Map rtnMap = new HashMap();
+
+        // statusCode
+        int statusCode = httpResponse.getStatusLine().getStatusCode();
+        try {
+            if((statusCode / 100) == 2) {
+                rtnMap.put("resultMsg", "OK");
+                rtnMap.put("result", httpResponse.getStatusLine());
+                rtnMap.put("resultCode", httpResponse.getStatusLine().getStatusCode());
+                rtnMap.put("resultEntity", EntityUtils.toString(httpResponse.getEntity()) );
+
+            } else {
+                rtnMap.put("resultMsg", "ERROR");
+                rtnMap.put("result", httpResponse.getStatusLine());
+                rtnMap.put("resultCode", httpResponse.getStatusLine().getStatusCode());
+                rtnMap.put("resultEntity", EntityUtils.toString(httpResponse.getEntity()) );
+
+            }
+
+            log.debug("rtnMap: {}, {}", rtnMap, httpResponse.getStatusLine());
+
+        } catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        return rtnMap;
+
     }
 
     @Override

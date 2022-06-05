@@ -10,15 +10,5 @@ import java.util.Map;
 
 public interface WebInfService
 {
-    String getAllAccounts() throws NoSuchAlgorithmException, UnsupportedEncodingException;
-
-    String orderChance() throws NoSuchAlgorithmException, UnsupportedEncodingException;
-
-    String orderSeperate() throws NoSuchAlgorithmException, UnsupportedEncodingException;
-
-    String candleMinute() throws NoSuchAlgorithmException, UnsupportedEncodingException;
-    String candleDay() throws NoSuchAlgorithmException, UnsupportedEncodingException;
-    String candleWeek() throws NoSuchAlgorithmException, UnsupportedEncodingException;
-    String candleMonth() throws NoSuchAlgorithmException, UnsupportedEncodingException;
-
+    Map execHttpGet(WebInfDto webInfDto) throws UnsupportedEncodingException, NoSuchAlgorithmException;
 }

@@ -39,7 +39,17 @@ public class WebInfServiceImpl implements WebInfService
     private static final String SECRETKEY = "jGXdrBlMrmVtJGFlA9xzktwksxDmujVD1x6XIJIU";
     private static final String SERVERURL = "https://api.upbit.com";
 
-    private Map execHttpClient(WebInfDto webInfDto) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    @Override
+    public Map execHttpGet(WebInfDto webInfDto) throws UnsupportedEncodingException, NoSuchAlgorithmException
+    {
+        HttpGet httpRequest = new HttpGet();
+
+        return execHttpClient(httpRequest, webInfDto);
+    }
+
+    
+
+    private Map execHttpClient(HttpRequestBase httpRequest, WebInfDto webInfDto) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         log.debug("execHttpClient executed");
 
         Map rtnMap = new HashMap();
@@ -87,13 +97,13 @@ public class WebInfServiceImpl implements WebInfService
         switch(webInfDto.getMethod())
         {
             case "GET":
+                httpRequest.setURI(URI.create(SERVERURL + webInfDto.getUri() + queryString));
+                httpRequest.setHeader("Content-Type", "application/json");
+                httpRequest.addHeader("Authorization", authenticationToken);
+
                 try
                 {
-                    HttpGet getRequest = new HttpGet(SERVERURL + "/v1/accounts?" + queryString);
-                    getRequest.setHeader("Content-Type", "application/json");
-                    getRequest.addHeader("Authorization", authenticationToken);
-
-                    response = client.execute(getRequest);
+                    response = client.execute(httpRequest);
                     entity = response.getEntity();
                 }
                 catch (IOException e)
@@ -141,270 +151,31 @@ public class WebInfServiceImpl implements WebInfService
 
         // statusCode
         int statusCode = httpResponse.getStatusLine().getStatusCode();
-        try {
-            if((statusCode / 100) == 2) {
+        try
+        {
+            if((statusCode / 100) == 2)
+            {
                 rtnMap.put("resultMsg", "OK");
                 rtnMap.put("result", httpResponse.getStatusLine());
                 rtnMap.put("resultCode", httpResponse.getStatusLine().getStatusCode());
                 rtnMap.put("resultEntity", EntityUtils.toString(httpResponse.getEntity()) );
-
-            } else {
+            }
+            else
+            {
                 rtnMap.put("resultMsg", "ERROR");
                 rtnMap.put("result", httpResponse.getStatusLine());
                 rtnMap.put("resultCode", httpResponse.getStatusLine().getStatusCode());
                 rtnMap.put("resultEntity", EntityUtils.toString(httpResponse.getEntity()) );
-
             }
 
             log.debug("rtnMap: {}, {}", rtnMap, httpResponse.getStatusLine());
-
-        } catch(IOException e)
+        }
+        catch(IOException e)
         {
             e.printStackTrace();
         }
 
         return rtnMap;
 
-    }
-
-    @Override
-    public String getAllAccounts() throws NoSuchAlgorithmException, UnsupportedEncodingException
-    {
-        Algorithm algorithm = Algorithm.HMAC256(SECRETKEY);
-        String jwtToken = JWT.create()
-                .withClaim("access_key", ACCESSKEY)
-                .withClaim("nonce", UUID.randomUUID().toString())
-                .sign(algorithm);
-
-        String authenticationToken = "Bearer " + jwtToken;
-        StringBuffer result = new StringBuffer();
-
-        CloseableHttpClient client = HttpClientBuilder.create().build();
-
-        try
-        {
-            HttpGet request = new HttpGet(SERVERURL + "/v1/accounts?");
-            request.setHeader("Content-Type", "application/json");
-            request.addHeader("Authorization", authenticationToken);
-
-            HttpResponse response = client.execute(request);
-            HttpEntity entity = response.getEntity();
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent(), Charset.forName("UTF-8")));
-            String buffer = null;
-            while((buffer=br.readLine()) != null)
-            {
-                result.append(buffer).append("\r\n");
-            }
-            log.debug("result : {}", result);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        finally {
-            try
-            {
-                client.close();
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        return result.toString();
-    }
-
-    @Override
-    public String orderChance() throws NoSuchAlgorithmException, UnsupportedEncodingException
-    {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("market", "KRW-BTC");
-
-        ArrayList<String> queryElements = new ArrayList<>();
-        for(Map.Entry<String, String> entity : params.entrySet())
-        {
-            queryElements.add(entity.getKey() + "=" + entity.getValue());
-        }
-
-        String queryString = String.join("&", queryElements.toArray(new String[0]));
-
-        MessageDigest md = MessageDigest.getInstance("SHA-512");
-        md.update(queryString.getBytes("UTF-8"));
-
-        String queryHash = String.format("%0128x", new BigInteger(1, md.digest()));
-
-        Algorithm algorithm = Algorithm.HMAC256(SECRETKEY);
-        String jwtToken = JWT.create()
-                .withClaim("access_key", ACCESSKEY)
-                .withClaim("nonce", UUID.randomUUID().toString())
-                .withClaim("query_hash", queryHash)
-                .withClaim("query_hash_alg", "SHA512")
-                .sign(algorithm);
-
-        String authenticationToken = "Bearer " + jwtToken;
-        StringBuffer result = new StringBuffer();
-
-        CloseableHttpClient client = HttpClientBuilder.create().build();
-
-        try
-        {
-            HttpGet request = new HttpGet(SERVERURL + "/v1/orders/chance?" + queryString);
-            request.setHeader("Content-Type", "application/json");
-            request.addHeader("Authorization", authenticationToken);
-
-            HttpResponse response = client.execute(request);
-            HttpEntity entity = response.getEntity();
-
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        finally {
-            try
-            {
-                client.close();
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        return result.toString();
-    }
-
-    @Override
-    public String orderSeperate() throws NoSuchAlgorithmException, UnsupportedEncodingException
-    {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("uuid", "9ca023a5-851b-4fec-9f0a-48cd83c2eaae");
-
-        ArrayList<String> queryElements = new ArrayList<>();
-        for(Map.Entry<String, String> entity : params.entrySet())
-        {
-            queryElements.add(entity.getKey() + "=" + entity.getValue());
-        }
-
-        String queryString = String.join("&", queryElements.toArray(new String[0]));
-
-        MessageDigest md = MessageDigest.getInstance("SHA-512");
-        md.update(queryString.getBytes("UTF-8"));
-
-        String queryHash = String.format("%0128x", new BigInteger(1, md.digest()));
-
-        Algorithm algorithm = Algorithm.HMAC256(SECRETKEY);
-        String jwtToken = JWT.create()
-                .withClaim("access_key", ACCESSKEY)
-                .withClaim("nonce", UUID.randomUUID().toString())
-                .withClaim("query_hash", queryHash)
-                .withClaim("query_hash_alg", "SHA512")
-                .sign(algorithm);
-
-        String authenticationToken = "Bearer " + jwtToken;
-        StringBuffer result = new StringBuffer();
-
-        CloseableHttpClient client = HttpClientBuilder.create().build();
-
-        try
-        {
-            HttpGet request = new HttpGet(SERVERURL + "/v1/order?" + queryString);
-            request.setHeader("Content-Type", "application/json");
-            request.addHeader("Authorization", authenticationToken);
-
-            HttpResponse response = client.execute(request);
-            HttpEntity entity = response.getEntity();
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent(), Charset.forName("UTF-8")));
-            String buffer = null;
-            while((buffer=br.readLine()) != null)
-            {
-                result.append(buffer).append("\r\n");
-            }
-            log.debug("result : {}", result);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        finally {
-            try
-            {
-                client.close();
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        return result.toString();
-    }
-
-    public Map postOrders() throws NoSuchAlgorithmException, UnsupportedEncodingException
-    {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("market", "KRW-BTC");
-        params.put("side", "bid");
-        params.put("volume", "0.01");
-        params.put("price", "100");
-        params.put("ord_type", "limit");
-
-        ArrayList<String> queryElements = new ArrayList<>();
-        for(Map.Entry<String, String> entity : params.entrySet()) {
-            queryElements.add(entity.getKey() + "=" + entity.getValue());
-        }
-
-        String queryString = String.join("&", queryElements.toArray(new String[0]));
-
-        MessageDigest md = MessageDigest.getInstance("SHA-512");
-        md.update(queryString.getBytes("UTF-8"));
-
-        String queryHash = String.format("%0128x", new BigInteger(1, md.digest()));
-
-        Algorithm algorithm = Algorithm.HMAC256(SECRETKEY);
-        String jwtToken = JWT.create()
-                .withClaim("access_key", ACCESSKEY)
-                .withClaim("nonce", UUID.randomUUID().toString())
-                .withClaim("query_hash", queryHash)
-                .withClaim("query_hash_alg", "SHA512")
-                .sign(algorithm);
-
-        String authenticationToken = "Bearer " + jwtToken;
-
-        try {
-            HttpClient client = HttpClientBuilder.create().build();
-            HttpPost request = new HttpPost(serverUrl + "/v1/orders");
-            request.setHeader("Content-Type", "application/json");
-            request.addHeader("Authorization", authenticationToken);
-            request.setEntity(new StringEntity(new Gson().toJson(params)));
-
-            HttpResponse response = client.execute(request);
-            HttpEntity entity = response.getEntity();
-
-            System.out.println(EntityUtils.toString(entity, "UTF-8"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public String candleMinute() throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        return null;
-    }
-
-    @Override
-    public String candleDay() throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        return null;
-    }
-
-    @Override
-    public String candleWeek() throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        return null;
-    }
-
-    @Override
-    public String candleMonth() throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        return null;
     }
 }

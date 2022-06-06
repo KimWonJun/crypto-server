@@ -47,7 +47,29 @@ public class WebInfServiceImpl implements WebInfService
         return execHttpClient(httpRequest, webInfDto);
     }
 
-    
+    @Override
+    public Map execHttpPost(WebInfDto webInfDto) throws UnsupportedEncodingException, NoSuchAlgorithmException
+    {
+        HttpPost httpRequest = new HttpPost();
+
+        return execHttpClient(httpRequest, webInfDto);
+    }
+
+    @Override
+    public Map execHttpPut(WebInfDto webInfDto) throws UnsupportedEncodingException, NoSuchAlgorithmException
+    {
+        HttpPut httpRequest = new HttpPut();
+
+        return execHttpClient(httpRequest, webInfDto);
+    }
+
+    @Override
+    public Map execHttpDelete(WebInfDto webInfDto) throws UnsupportedEncodingException, NoSuchAlgorithmException
+    {
+        HttpDelete httpRequest = new HttpDelete();
+
+        return execHttpClient(httpRequest, webInfDto);
+    }
 
     private Map execHttpClient(HttpRequestBase httpRequest, WebInfDto webInfDto) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         log.debug("execHttpClient executed");
@@ -74,21 +96,7 @@ public class WebInfServiceImpl implements WebInfService
         }
 
         String queryString = String.join("&", queryElements.toArray(new String[0]));
-
-        MessageDigest md = MessageDigest.getInstance("SHA-512");
-        md.update(queryString.getBytes("UTF-8"));
-
-        String queryHash = String.format("%0128x", new BigInteger(1, md.digest()));
-
-        Algorithm algorithm = Algorithm.HMAC256(SECRETKEY);
-        String jwtToken = JWT.create()
-                .withClaim("access_key", ACCESSKEY)
-                .withClaim("nonce", UUID.randomUUID().toString())
-                .withClaim("query_hash", queryHash)
-                .withClaim("query_hash_alg", "SHA512")
-                .sign(algorithm);
-
-        String authenticationToken = "Bearer " + jwtToken;
+        String authenticationToken = setJwtToken(queryString);
 
         CloseableHttpClient client = HttpClientBuilder.create().build();
         CloseableHttpResponse response = null;
@@ -136,13 +144,43 @@ public class WebInfServiceImpl implements WebInfService
         }
         rtnMap = setResultMap(response);
 
-        try {
-            log.debug(EntityUtils.toString(entity, "UTF-8"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            log.debug(EntityUtils.toString(entity, "UTF-8"));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         return rtnMap;
+    }
+
+    private String setJwtToken(String queryString) throws NoSuchAlgorithmException, UnsupportedEncodingException
+    {
+        String jwtToken = "";
+
+        if ("".equals(queryString))
+        {
+            Algorithm algorithm = Algorithm.HMAC256(SECRETKEY);
+            jwtToken = JWT.create()
+                    .withClaim("access_key", ACCESSKEY)
+                    .withClaim("nonce", UUID.randomUUID().toString())
+                    .sign(algorithm);
+        }
+        else
+        {
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
+            md.update(queryString.getBytes("UTF-8"));
+
+            String queryHash = String.format("%0128x", new BigInteger(1, md.digest()));
+
+            Algorithm algorithm = Algorithm.HMAC256(SECRETKEY);
+            jwtToken = JWT.create()
+                    .withClaim("access_key", ACCESSKEY)
+                    .withClaim("nonce", UUID.randomUUID().toString())
+                    .withClaim("query_hash", queryHash)
+                    .withClaim("query_hash_alg", "SHA512")
+                    .sign(algorithm);
+        }
+        return "Bearer " + jwtToken;
     }
 
     private Map setResultMap(CloseableHttpResponse httpResponse)

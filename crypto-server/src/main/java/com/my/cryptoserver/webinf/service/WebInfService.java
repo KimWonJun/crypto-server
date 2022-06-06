@@ -11,4 +11,10 @@ import java.util.Map;
 public interface WebInfService
 {
     Map execHttpGet(WebInfDto webInfDto) throws UnsupportedEncodingException, NoSuchAlgorithmException;
+
+    Map execHttpPost(WebInfDto webInfDto) throws UnsupportedEncodingException, NoSuchAlgorithmException;
+
+    Map execHttpPut(WebInfDto webInfDto) throws UnsupportedEncodingException, NoSuchAlgorithmException;
+
+    Map execHttpDelete(WebInfDto webInfDto) throws UnsupportedEncodingException, NoSuchAlgorithmException;
 }

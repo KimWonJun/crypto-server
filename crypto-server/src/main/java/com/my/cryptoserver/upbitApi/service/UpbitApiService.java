@@ -8,16 +8,16 @@ import java.util.Map;
 
 public interface UpbitApiService
 {
-    Map getAllAccounts(WebInfDto webInfDto) throws NoSuchAlgorithmException, UnsupportedEncodingException;
+    Map getAllAccounts() throws NoSuchAlgorithmException, UnsupportedEncodingException;
+
+    Map getOrderChance() throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
     Map postOrder(WebInfDto webInfDto) throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
-    String orderChance() throws NoSuchAlgorithmException, UnsupportedEncodingException;
+    Map orderSeperate() throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
-    String orderSeperate() throws NoSuchAlgorithmException, UnsupportedEncodingException;
-
-    String candleMinute() throws NoSuchAlgorithmException, UnsupportedEncodingException;
-    String candleDay() throws NoSuchAlgorithmException, UnsupportedEncodingException;
-    String candleWeek() throws NoSuchAlgorithmException, UnsupportedEncodingException;
-    String candleMonth() throws NoSuchAlgorithmException, UnsupportedEncodingException;
+    Map candleMinute() throws NoSuchAlgorithmException, UnsupportedEncodingException;
+    Map candleDay() throws NoSuchAlgorithmException, UnsupportedEncodingException;
+    Map candleWeek() throws NoSuchAlgorithmException, UnsupportedEncodingException;
+    Map candleMonth() throws NoSuchAlgorithmException, UnsupportedEncodingException;
 }

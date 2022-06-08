@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpbitApiDto
+public class UpbitApiDTO
 {
     private String coinId;
     private String coinNameKo;

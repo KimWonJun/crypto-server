@@ -1,6 +1,7 @@
 package com.my.cryptoserver.upbitApi.service;
 
 import com.my.cryptoserver.test.controller.TestController;
+import com.my.cryptoserver.upbitApi.dto.UpbitApiDTO;
 import com.my.cryptoserver.webinf.dto.WebInfDto;
 import com.my.cryptoserver.webinf.service.WebInfService;
 import com.my.cryptoserver.webinf.service.WebInfServiceImpl;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -21,6 +23,9 @@ public class UpbitApiServiceImpl implements UpbitApiService
 
     @Autowired
     private WebInfService webInfService;
+
+    @Autowired
+    private CoinService coinService;
 
     @Override
     public Map getAllAccounts() throws NoSuchAlgorithmException, UnsupportedEncodingException
@@ -41,6 +46,9 @@ public class UpbitApiServiceImpl implements UpbitApiService
         log.debug("upbitApiService getOrderChance");
 
         WebInfDto webInfDto = new WebInfDto();
+
+        List<UpbitApiDTO> coinList = coinService.getCoinList();
+        log.debug("coinList : {}", coinList);
 
         HashMap<String, String> params = new HashMap<>();
         params.put("market", "KRW-BTC");

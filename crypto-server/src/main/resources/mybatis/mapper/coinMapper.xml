@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.my.cryptoserver.upbitApi.mapper.coinMapper">
+<mapper namespace="com.my.cryptoserver.upbitApi.mapper.CoinMapper">
     <select id="getCoinList" resultType="com.my.cryptoserver.upbitApi.dto.UpbitApiDTO">
         SELECT coin_id
             ,  coin_name_ko

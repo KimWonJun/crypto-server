@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.my.cryptoserver.upbitApi.mapper.coinMapper">
+    <select id="getCoinList" resultType="com.my.cryptoserver.upbitApi.dto.UpbitApiDTO">
+        SELECT coin_id
+            ,  coin_name_ko
+            ,  coin_name_eng
+            ,  monitoring_yn
+          FROM coin_list
+         WHERE 0=0
+        <if test="monitoring_yn != null">
+           AND monitoring_yn = #{monitoring_yn}
+        </if>
+    </select>
+</mapper>

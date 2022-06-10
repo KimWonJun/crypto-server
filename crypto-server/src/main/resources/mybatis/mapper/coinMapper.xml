@@ -14,4 +14,57 @@
            AND monitoring_yn = #{monitoring_yn}
         </if>
     </select>
+
+    <insert id="insertCoinPrice" parameterType="com.my.cryptoserver.upbitApi.dto.UpbitApiDTO">
+        INSERT INTO coin_price
+        (
+            coin_id
+          , current_date
+          , current_time
+          , opening_price
+          , high_price
+          , low_price
+          , prev_closing_price
+          , trade_volume
+          , acc_trade_price
+          , acc_trade_price_24h
+          , acc_trade_volume
+          , acc_trade_volume_24h
+          , higest_52week_price
+          , higest_52week_date
+          , lowest_52week_price
+          , lowest_52week_date
+          , fst_reg_id
+          , fst_reg_dt
+          , fst_reg_ip
+          , lst_upt_id
+          , lst_upt_dt
+          , lst_upt_ip
+        )
+        values
+        (
+            #{coin_id}
+          , #{currentDate}
+          , #{currentTime}
+          , #{openingPrice}
+          , #{highPrice}
+          , #{lowPrice}
+          , #{prevClosingPrice}
+          , #{tradeVolume}
+          , #{accTradePrice}
+          , #{accTradePrice24h}
+          , #{accTradeVolume}
+          , #{accTradeVolume24h}
+          , #{higest52weekPrice}
+          , #{higest52weekDate}
+          , #{lowest52weekPrice}
+          , #{lowest52weekDate}
+          , {fstRegId}
+          , {fstRegDt}
+          , {fstRegIp}
+          , {lstUptId}
+          , {lstUptDt}
+          , {lstUptIp}
+        )
+    </insert>
 </mapper>

@@ -9,4 +9,6 @@ import java.util.List;
 public interface CoinMapper
 {
     List<UpbitApiDTO> getCoinList();
+
+    void insertCoinPrice();
 }

@@ -18,4 +18,6 @@ public class CoinServiceImpl implements CoinService
     {
         return coinMapper.getCoinList();
     }
+
+
 }

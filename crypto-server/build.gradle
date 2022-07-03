@@ -12,10 +12,6 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
-	// spring boot 기본 logback 제외
-	all {
-		exclude group : 'org.springframework.boot', module:'spring-boot-starter-logging'
-	}
 }
 
 repositories {
@@ -32,6 +28,11 @@ dependencies {
 	implementation 'org.apache.httpcomponents:httpmime:4.5.13'
 	implementation 'org.apache.httpcomponents:httpcore:4.4.13'
 
+	// okhttp
+	implementation 'com.squareup.okhttp3:okhttp'
+	implementation 'com.squareup.okio:okio-jvm'
+
+
 	// log4j2
 	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 
@@ -40,7 +41,6 @@ dependencies {
 
 	// gson
 	implementation 'com.google.code.gson:gson:2.9.0'
-
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

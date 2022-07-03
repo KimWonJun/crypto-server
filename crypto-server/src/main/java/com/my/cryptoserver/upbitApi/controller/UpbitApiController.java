@@ -34,4 +34,10 @@ public class UpbitApiController
     {
         return upbitApiService.getOrderChance();
     }
+
+    @RequestMapping(value="/getCoinPrice", method=RequestMethod.GET)
+    public Map getCoinPrice() throws UnsupportedEncodingException, NoSuchAlgorithmException
+    {
+        return upbitApiService.getCoinPrice();
+    }
 }

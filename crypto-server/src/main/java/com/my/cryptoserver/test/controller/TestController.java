@@ -24,9 +24,6 @@ public class TestController
     @Autowired
     private TestService testService;
 
-    @Autowired
-    private WebInfService webInfService;
-
     @RequestMapping(value="/user", method= RequestMethod.GET)
     public ResponseEntity<?> selectUserList() throws Exception
     {

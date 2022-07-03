@@ -30,10 +30,6 @@
           , acc_trade_price_24h
           , acc_trade_volume
           , acc_trade_volume_24h
-          , higest_52week_price
-          , higest_52week_date
-          , lowest_52week_price
-          , lowest_52week_date
           , fst_reg_id
           , fst_reg_dt
           , fst_reg_ip
@@ -55,10 +51,6 @@
           , #{accTradePrice24h}
           , #{accTradeVolume}
           , #{accTradeVolume24h}
-          , #{higest52weekPrice}
-          , #{higest52weekDate}
-          , #{lowest52weekPrice}
-          , #{lowest52weekDate}
           , {fstRegId}
           , {fstRegDt}
           , {fstRegIp}

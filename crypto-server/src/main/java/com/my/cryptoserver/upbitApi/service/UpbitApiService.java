@@ -12,6 +12,8 @@ public interface UpbitApiService
 
     Map getOrderChance() throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
+    Map getCoinPrice() throws NoSuchAlgorithmException, UnsupportedEncodingException;
+
     Map postOrder(WebInfDto webInfDto) throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
     Map orderSeperate() throws NoSuchAlgorithmException, UnsupportedEncodingException;

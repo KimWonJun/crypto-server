@@ -5,8 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.google.gson.Gson;
 import com.my.cryptoserver.webinf.dto.WebInfDto;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -16,13 +14,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URI;
-import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -31,44 +26,108 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class WebInfServiceImpl implements WebInfService
+public class HttpServiceImpl implements HttpService
 {
-    private static final Logger log = LogManager.getLogger(WebInfServiceImpl.class);
+    private static final Logger log = LogManager.getLogger(HttpServiceImpl.class);
 
     private static final String ACCESSKEY = "lBTxXTh63tVEO4EkQwSutcbsURndQh52jQfpxOa0";
     private static final String SECRETKEY = "jGXdrBlMrmVtJGFlA9xzktwksxDmujVD1x6XIJIU";
     private static final String SERVERURL = "https://api.upbit.com";
 
     @Override
-    public Map execHttpGet(WebInfDto webInfDto) throws UnsupportedEncodingException, NoSuchAlgorithmException
+    public Map execHttpGet(WebInfDto webInfDto)
     {
         HttpGet httpRequest = new HttpGet();
+        Map returnMap = new HashMap<>();
 
-        return execHttpClient(httpRequest, webInfDto);
+        try
+        {
+            returnMap = execHttpClient(httpRequest, webInfDto);
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            return returnMap;
+        }
     }
 
     @Override
-    public Map execHttpPost(WebInfDto webInfDto) throws UnsupportedEncodingException, NoSuchAlgorithmException
+    public Map execHttpPost(WebInfDto webInfDto)
     {
         HttpPost httpRequest = new HttpPost();
+        Map returnMap = new HashMap<>();
 
-        return execHttpClient(httpRequest, webInfDto);
+        try
+        {
+            returnMap = execHttpClient(httpRequest, webInfDto);
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            return returnMap;
+        }
     }
 
     @Override
-    public Map execHttpPut(WebInfDto webInfDto) throws UnsupportedEncodingException, NoSuchAlgorithmException
+    public Map execHttpPut(WebInfDto webInfDto)
     {
         HttpPut httpRequest = new HttpPut();
+        Map returnMap = new HashMap<>();
 
-        return execHttpClient(httpRequest, webInfDto);
+        try
+        {
+            returnMap = execHttpClient(httpRequest, webInfDto);
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            return returnMap;
+        }
     }
 
     @Override
-    public Map execHttpDelete(WebInfDto webInfDto) throws UnsupportedEncodingException, NoSuchAlgorithmException
+    public Map execHttpDelete(WebInfDto webInfDto)
     {
         HttpDelete httpRequest = new HttpDelete();
+        Map returnMap = new HashMap<>();
 
-        return execHttpClient(httpRequest, webInfDto);
+        try
+        {
+            returnMap = execHttpClient(httpRequest, webInfDto);
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            return returnMap;
+        }
     }
 
     private Map execHttpClient(HttpRequestBase httpRequest, WebInfDto webInfDto) throws NoSuchAlgorithmException, UnsupportedEncodingException {

@@ -1,10 +1,9 @@
 package com.my.cryptoserver.upbitApi.service;
 
-import com.my.cryptoserver.test.controller.TestController;
 import com.my.cryptoserver.upbitApi.dto.UpbitApiDTO;
 import com.my.cryptoserver.webinf.dto.WebInfDto;
-import com.my.cryptoserver.webinf.service.WebInfService;
-import com.my.cryptoserver.webinf.service.WebInfServiceImpl;
+import com.my.cryptoserver.webinf.service.HttpService;
+import com.my.cryptoserver.webinf.service.OkHttpService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,10 @@ public class UpbitApiServiceImpl implements UpbitApiService
     private static final Logger log = LogManager.getLogger(UpbitApiService.class);
 
     @Autowired
-    private WebInfService webInfService;
+    private HttpService webInfService;
+
+    @Autowired
+    private OkHttpService okHttpService;
 
     @Autowired
     private CoinService coinService;
@@ -77,6 +79,22 @@ public class UpbitApiServiceImpl implements UpbitApiService
         webInfDto.setMethod("POST");
 
         return webInfService.execHttpPost(webInfDto);
+    }
+
+    @Override
+    public Map getCoinPrice() throws NoSuchAlgorithmException, UnsupportedEncodingException
+    {
+        WebInfDto webInfDto = new WebInfDto();
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("markets", "KRW-BTC");
+
+        webInfDto.setParamMap(params);
+
+        webInfDto.setUri("/v1/ticker");
+        webInfDto.setMethod("GET");
+
+        return okHttpService.execHttpGet(webInfDto);
     }
 
     @Override

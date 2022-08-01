@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,6 +88,8 @@ public class UpbitApiServiceImpl implements UpbitApiService
         WebInfDto webInfDto = new WebInfDto();
 
         HashMap<String, String> params = new HashMap<>();
+        List<String> coinList = new ArrayList<String>();
+        coinList.add("KRW-BTC");
         params.put("markets", "KRW-BTC");
 
         webInfDto.setParamMap(params);

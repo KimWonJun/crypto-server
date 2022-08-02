@@ -1,5 +1,7 @@
 package com.my.cryptoserver.upbitApi.service;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.my.cryptoserver.upbitApi.dto.UpbitApiDTO;
 import com.my.cryptoserver.webinf.dto.WebInfDto;
 import com.my.cryptoserver.webinf.service.HttpService;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -94,10 +97,24 @@ public class UpbitApiServiceImpl implements UpbitApiService
 
         webInfDto.setParamMap(params);
 
-        webInfDto.setUri("/v1/ticker");
+        webInfDto.setUri("https://api.upbit.com/v1/ticker");
         webInfDto.setMethod("GET");
 
-        return okHttpService.execHttpGet(webInfDto);
+        Map resultMap = okHttpService.execHttpGet(webInfDto);
+
+        Gson gson = new Gson();
+        Type listType = new TypeToken<ArrayList<UpbitApiDTO>>(){}.getType();
+        List<UpbitApiDTO> resultList = gson.fromJson(resultMap.get("responseBody").toString(), listType);
+//            upbitApiDto = gson.fromJson(response.body().string(), UpbitApiDTO.class);
+        log.debug("coinList : {}", resultList);
+
+        int listSize = resultList.size();
+        for(int index = 0; index < listSize; index++)
+        {
+            log.debug("market : {}", resultList.get(index));
+        }
+
+        return resultMap;
     }
 
     @Override

@@ -15,4 +15,6 @@ public class UpbitApiDTO
     private String coinNameKo;
     private String coinNameEng;
     private String monitoringYn;
+
+
 }

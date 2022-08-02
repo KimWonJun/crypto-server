@@ -1,12 +1,14 @@
 package com.my.cryptoserver.webinf.service;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.my.cryptoserver.upbitApi.dto.UpbitApiDTO;
 import com.my.cryptoserver.webinf.dto.WebInfDto;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Type;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import com.my.cryptoserver.webinf.util.UpbitWebSocketListener;
 import okhttp3.*;
@@ -24,70 +26,37 @@ public class OkHttpServiceImpl implements OkHttpService
 
     private UpbitWebSocketListener upbitWebSocketListener;
 
+    private UpbitApiDTO upbitApiDto;
+
     @Override
     public Map execHttpGet(WebInfDto webInfDto)
     {
-        OkHttpClient client = new OkHttpClient();
-
-        Request request = new Request.Builder()
-                .url("https://api.upbit.com/v1/ticker?markets=KRW-BTC")
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
                 .build();
 
-        UpbitWebSocketListener webSocketListener = new UpbitWebSocketListener();
-        webSocketListener.setParameter("TRADE", List.of("KRW-BTC"));
+        HttpUrl.Builder httpBuilder = HttpUrl.parse(webInfDto.getUri()).newBuilder();
+        httpBuilder.addQueryParameter("markets", "KRW-BTC");
 
-        WebSocket websocket = client.newWebSocket(request, webSocketListener);
+        Request request = new Request.Builder().url(httpBuilder.build()).build();
+
+        String responseBody = "";
+        try(Response response = client.newCall(request).execute()){
+
+            responseBody = response.body().string();
+            log.debug("responseBody : {}", responseBody);
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+
         client.dispatcher().executorService().shutdown();
+        Map resultMap = new HashMap();
+        resultMap.put("responseBody", responseBody);
 
-
-        return null;
-
-//        Map returnMap = new HashMap();
-//        Response response = null;
-//
-//        OkHttpClient client = new OkHttpClient();
-//        StringBuilder urlSb = new StringBuilder();
-//        urlSb.append("https://api.upbit.com");
-//        urlSb.append(webInfDto.getUri());
-//
-//        Iterator<String> keys = webInfDto.getParamMap().keySet().iterator();
-//        if(keys != null)
-//        {
-//            urlSb.append("?");
-//        }
-//        while(keys.hasNext())
-//        {
-//            String key = keys.next();
-//            urlSb.append(key);
-//            urlSb.append("=");
-//            urlSb.append(webInfDto.getParamMap().get(key));
-//        }
-//
-//        //HttpUrl.Builder httpUrlBuilder = HttpUrl.get(urlSb.toString()).newBuilder();
-//
-//        Request request = new Request.Builder()
-//                .url(urlSb.toString())
-//                .get()
-//                .addHeader("Accept", "application/json")
-//                .build();
-//
-//        try
-//        {
-//            response = client.newCall(request).execute();
-//
-//            log.debug("============================================================================");
-//            log.debug(response);
-//            log.debug("response : {}", response.body());
-//            log.debug("============================================================================");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        log.debug("============================================================================");
-//        log.debug(response);
-//        log.debug("============================================================================");
-//
-//        return null;
+        return resultMap;
     }
 
     @Override

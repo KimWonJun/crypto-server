@@ -39,7 +39,7 @@
         )
         values
         (
-            #{coin_id}
+            #{coinId}
           , #{currentDate}
           , #{currentTime}
           , #{openingPrice}

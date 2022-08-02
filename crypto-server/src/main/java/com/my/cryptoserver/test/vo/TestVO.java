@@ -1,4 +1,4 @@
-package com.my.cryptoserver.test.dto;
+package com.my.cryptoserver.test.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class TestDTO
+public class TestVO
 {
     private String userId;
     private String userName;

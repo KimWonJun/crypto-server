@@ -1,6 +1,6 @@
 package com.my.cryptoserver.upbitApi.service;
 
-import com.my.cryptoserver.webinf.dto.WebInfDto;
+import com.my.cryptoserver.webinf.vo.WebInfVO;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -14,7 +14,7 @@ public interface UpbitApiService
 
     Map getCoinPrice() throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
-    Map postOrder(WebInfDto webInfDto) throws NoSuchAlgorithmException, UnsupportedEncodingException;
+    Map postOrder(WebInfVO webInfVO) throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
     Map orderSeperate() throws NoSuchAlgorithmException, UnsupportedEncodingException;
 

@@ -1,7 +1,5 @@
 package com.my.cryptoserver.upbitApi.controller;
 
-import com.my.cryptoserver.upbitApi.dto.UpbitApiDTO;
-import com.my.cryptoserver.upbitApi.service.CoinService;
 import com.my.cryptoserver.upbitApi.service.UpbitApiService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.Map;
 
 @Controller

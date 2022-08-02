@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.my.cryptoserver.test.mapper.TestMapper">
-    <select id="selectUserList" resultType="com.my.cryptoserver.test.dto.TestDTO">
+    <select id="selectUserList" resultType="com.my.cryptoserver.test.vo.TestVO">
         SELECT user_id
             ,  user_name
             ,  user_email

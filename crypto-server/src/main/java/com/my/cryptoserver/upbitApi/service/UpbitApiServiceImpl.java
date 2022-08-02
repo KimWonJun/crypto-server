@@ -2,8 +2,8 @@ package com.my.cryptoserver.upbitApi.service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.my.cryptoserver.upbitApi.dto.UpbitApiDTO;
-import com.my.cryptoserver.webinf.dto.WebInfDto;
+import com.my.cryptoserver.upbitApi.vo.UpbitApiVO;
+import com.my.cryptoserver.webinf.vo.WebInfVO;
 import com.my.cryptoserver.webinf.service.HttpService;
 import com.my.cryptoserver.webinf.service.OkHttpService;
 import org.apache.logging.log4j.LogManager;
@@ -38,12 +38,12 @@ public class UpbitApiServiceImpl implements UpbitApiService
     {
         log.debug("upbitApiService getallAccounts");
 
-        WebInfDto webInfDto = new WebInfDto();
+        WebInfVO webInfVO = new WebInfVO();
 
-        webInfDto.setUri("/v1/accounts?");
-        webInfDto.setMethod("GET");
+        webInfVO.setUri("/v1/accounts?");
+        webInfVO.setMethod("GET");
 
-        return webInfService.execHttpGet(webInfDto);
+        return webInfService.execHttpGet(webInfVO);
     }
 
     @Override
@@ -51,24 +51,24 @@ public class UpbitApiServiceImpl implements UpbitApiService
     {
         log.debug("upbitApiService getOrderChance");
 
-        WebInfDto webInfDto = new WebInfDto();
+        WebInfVO webInfVO = new WebInfVO();
 
-        List<UpbitApiDTO> coinList = coinService.getCoinList();
+        List<UpbitApiVO> coinList = coinService.getCoinList();
         log.debug("coinList : {}", coinList);
 
         HashMap<String, String> params = new HashMap<>();
         params.put("market", "KRW-BTC");
 
-        webInfDto.setParamMap(params);
+        webInfVO.setParamMap(params);
 
-        webInfDto.setUri("/v1/orders/chance?");
-        webInfDto.setMethod("GET");
+        webInfVO.setUri("/v1/orders/chance?");
+        webInfVO.setMethod("GET");
 
-        return webInfService.execHttpGet(webInfDto);
+        return webInfService.execHttpGet(webInfVO);
     }
 
     @Override
-    public Map postOrder(WebInfDto webInfDto) throws NoSuchAlgorithmException, UnsupportedEncodingException
+    public Map postOrder(WebInfVO webInfVO) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
         HashMap<String, String> params = new HashMap<>();
         params.put("market", "KRW-BTC");
@@ -77,34 +77,34 @@ public class UpbitApiServiceImpl implements UpbitApiService
         params.put("price", "100");
         params.put("ord_type", "limit");
 
-        webInfDto.setParamMap(params);
+        webInfVO.setParamMap(params);
 
-        webInfDto.setUri("/v1/orders");
-        webInfDto.setMethod("POST");
+        webInfVO.setUri("/v1/orders");
+        webInfVO.setMethod("POST");
 
-        return webInfService.execHttpPost(webInfDto);
+        return webInfService.execHttpPost(webInfVO);
     }
 
     @Override
     public Map getCoinPrice() throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
-        WebInfDto webInfDto = new WebInfDto();
+        WebInfVO webInfVO = new WebInfVO();
 
         HashMap<String, String> params = new HashMap<>();
         List<String> coinList = new ArrayList<String>();
         coinList.add("KRW-BTC");
         params.put("markets", "KRW-BTC");
 
-        webInfDto.setParamMap(params);
+        webInfVO.setParamMap(params);
 
-        webInfDto.setUri("https://api.upbit.com/v1/ticker");
-        webInfDto.setMethod("GET");
+        webInfVO.setUri("https://api.upbit.com/v1/ticker");
+        webInfVO.setMethod("GET");
 
-        Map resultMap = okHttpService.execHttpGet(webInfDto);
+        Map resultMap = okHttpService.execHttpGet(webInfVO);
 
         Gson gson = new Gson();
-        Type listType = new TypeToken<ArrayList<UpbitApiDTO>>(){}.getType();
-        List<UpbitApiDTO> resultList = gson.fromJson(resultMap.get("responseBody").toString(), listType);
+        Type listType = new TypeToken<ArrayList<UpbitApiVO>>(){}.getType();
+        List<UpbitApiVO> resultList = gson.fromJson(resultMap.get("responseBody").toString(), listType);
 //            upbitApiDto = gson.fromJson(response.body().string(), UpbitApiDTO.class);
         log.debug("coinList : {}", resultList);
 

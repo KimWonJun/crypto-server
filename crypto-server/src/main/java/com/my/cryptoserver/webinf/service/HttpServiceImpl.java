@@ -3,7 +3,7 @@ package com.my.cryptoserver.webinf.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.google.gson.Gson;
-import com.my.cryptoserver.webinf.dto.WebInfDto;
+import com.my.cryptoserver.webinf.vo.WebInfVO;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
@@ -35,14 +35,14 @@ public class HttpServiceImpl implements HttpService
     private static final String SERVERURL = "https://api.upbit.com";
 
     @Override
-    public Map execHttpGet(WebInfDto webInfDto)
+    public Map execHttpGet(WebInfVO webInfVO)
     {
         HttpGet httpRequest = new HttpGet();
         Map returnMap = new HashMap<>();
 
         try
         {
-            returnMap = execHttpClient(httpRequest, webInfDto);
+            returnMap = execHttpClient(httpRequest, webInfVO);
         }
         catch (NoSuchAlgorithmException e)
         {
@@ -59,14 +59,14 @@ public class HttpServiceImpl implements HttpService
     }
 
     @Override
-    public Map execHttpPost(WebInfDto webInfDto)
+    public Map execHttpPost(WebInfVO webInfVO)
     {
         HttpPost httpRequest = new HttpPost();
         Map returnMap = new HashMap<>();
 
         try
         {
-            returnMap = execHttpClient(httpRequest, webInfDto);
+            returnMap = execHttpClient(httpRequest, webInfVO);
         }
         catch (NoSuchAlgorithmException e)
         {
@@ -83,14 +83,14 @@ public class HttpServiceImpl implements HttpService
     }
 
     @Override
-    public Map execHttpPut(WebInfDto webInfDto)
+    public Map execHttpPut(WebInfVO webInfVO)
     {
         HttpPut httpRequest = new HttpPut();
         Map returnMap = new HashMap<>();
 
         try
         {
-            returnMap = execHttpClient(httpRequest, webInfDto);
+            returnMap = execHttpClient(httpRequest, webInfVO);
         }
         catch (NoSuchAlgorithmException e)
         {
@@ -107,14 +107,14 @@ public class HttpServiceImpl implements HttpService
     }
 
     @Override
-    public Map execHttpDelete(WebInfDto webInfDto)
+    public Map execHttpDelete(WebInfVO webInfVO)
     {
         HttpDelete httpRequest = new HttpDelete();
         Map returnMap = new HashMap<>();
 
         try
         {
-            returnMap = execHttpClient(httpRequest, webInfDto);
+            returnMap = execHttpClient(httpRequest, webInfVO);
         }
         catch (NoSuchAlgorithmException e)
         {
@@ -130,7 +130,7 @@ public class HttpServiceImpl implements HttpService
         }
     }
 
-    private Map execHttpClient(HttpRequestBase httpRequest, WebInfDto webInfDto) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    private Map execHttpClient(HttpRequestBase httpRequest, WebInfVO webInfVO) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         log.debug("execHttpClient executed");
 
         Map rtnMap = new HashMap();
@@ -138,9 +138,9 @@ public class HttpServiceImpl implements HttpService
         // Query String parameter 가 존재하는 경우
         HashMap<String, String> params = new HashMap<>();
 
-        if(webInfDto.getParamMap() != null && !webInfDto.getParamMap().isEmpty())
+        if(webInfVO.getParamMap() != null && !webInfVO.getParamMap().isEmpty())
         {
-            Map<String, String> map = webInfDto.getParamMap();
+            Map<String, String> map = webInfVO.getParamMap();
 
             for(Map.Entry<String, String> entry : map.entrySet())
             {
@@ -161,10 +161,10 @@ public class HttpServiceImpl implements HttpService
         CloseableHttpResponse response = null;
         HttpEntity entity = null;
 
-        switch(webInfDto.getMethod())
+        switch(webInfVO.getMethod())
         {
             case "GET":
-                httpRequest.setURI(URI.create(SERVERURL + webInfDto.getUri() + queryString));
+                httpRequest.setURI(URI.create(SERVERURL + webInfVO.getUri() + queryString));
                 httpRequest.setHeader("Content-Type", "application/json");
                 httpRequest.addHeader("Authorization", authenticationToken);
 
@@ -181,7 +181,7 @@ public class HttpServiceImpl implements HttpService
 
             case "POST":
                 try {
-                    HttpPost postRequest = new HttpPost(SERVERURL + webInfDto.getUri());
+                    HttpPost postRequest = new HttpPost(SERVERURL + webInfVO.getUri());
                     postRequest.setHeader("Content-Type", "application/json");
                     postRequest.addHeader("Authorization", authenticationToken);
                     postRequest.setEntity(new StringEntity(new Gson().toJson(params)));

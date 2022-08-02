@@ -1,6 +1,6 @@
 package com.my.cryptoserver.upbitApi.mapper;
 
-import com.my.cryptoserver.upbitApi.dto.UpbitApiDTO;
+import com.my.cryptoserver.upbitApi.vo.UpbitApiVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface CoinMapper
 {
-    List<UpbitApiDTO> getCoinList();
+    List<UpbitApiVO> getCoinList();
 
     void insertCoinPrice();
 }

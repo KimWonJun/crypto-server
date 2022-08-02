@@ -1,12 +1,9 @@
 package com.my.cryptoserver.webinf.service;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.my.cryptoserver.upbitApi.dto.UpbitApiDTO;
-import com.my.cryptoserver.webinf.dto.WebInfDto;
+import com.my.cryptoserver.upbitApi.vo.UpbitApiVO;
+import com.my.cryptoserver.webinf.vo.WebInfVO;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -16,7 +13,6 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,17 +22,17 @@ public class OkHttpServiceImpl implements OkHttpService
 
     private UpbitWebSocketListener upbitWebSocketListener;
 
-    private UpbitApiDTO upbitApiDto;
+    private UpbitApiVO upbitApiVO;
 
     @Override
-    public Map execHttpGet(WebInfDto webInfDto)
+    public Map execHttpGet(WebInfVO webInfVO)
     {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .build();
 
-        HttpUrl.Builder httpBuilder = HttpUrl.parse(webInfDto.getUri()).newBuilder();
+        HttpUrl.Builder httpBuilder = HttpUrl.parse(webInfVO.getUri()).newBuilder();
         httpBuilder.addQueryParameter("markets", "KRW-BTC");
 
         Request request = new Request.Builder().url(httpBuilder.build()).build();
@@ -60,17 +56,17 @@ public class OkHttpServiceImpl implements OkHttpService
     }
 
     @Override
-    public Map execHttpPost(WebInfDto webInfDto) {
+    public Map execHttpPost(WebInfVO webInfVO) {
         return null;
     }
 
     @Override
-    public Map execHttpPut(WebInfDto webInfDto) {
+    public Map execHttpPut(WebInfVO webInfVO) {
         return null;
     }
 
     @Override
-    public Map execHttpDelete(WebInfDto webInfDto) {
+    public Map execHttpDelete(WebInfVO webInfVO) {
         return null;
     }
 

@@ -1,5 +1,6 @@
 package com.my.cryptoserver.upbitApi.vo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +17,9 @@ public class UpbitApiVO
     private String coinNameEng;         // 코인이름(영문)
     private String monitoringYn;        // 모니터링 여부
 
-    private int currentDate;            // 현재일자
-    private int currentTime;            // 현재시간
+    private String market;              // 종목구분코드
+    private int inputDate;              // 현재일자
+    private int inputTime;              // 현재시간
     private double openingPrice;        // 시가
     private double highPrice;           // 고가
     private double lowPrice;            // 저가

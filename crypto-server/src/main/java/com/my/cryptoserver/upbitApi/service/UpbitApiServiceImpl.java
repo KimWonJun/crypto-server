@@ -1,6 +1,9 @@
 package com.my.cryptoserver.upbitApi.service;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.my.cryptoserver.upbitApi.vo.UpbitApiVO;
 import com.my.cryptoserver.webinf.vo.WebInfVO;
@@ -91,10 +94,19 @@ public class UpbitApiServiceImpl implements UpbitApiService
         WebInfVO webInfVO = new WebInfVO();
 
         HashMap<String, String> params = new HashMap<>();
-        List<String> coinList = new ArrayList<String>();
-        coinList.add("KRW-BTC");
-        params.put("markets", "KRW-BTC");
 
+        List<UpbitApiVO> coinList = coinService.getCoinList();
+        StringBuilder coinIdSb = new StringBuilder();
+        int coinListSize = coinList.size();
+        for(int index = 0; index < coinListSize; index++)
+        {
+            if(index > 0)
+            {
+                coinIdSb.append("%2C");     // coin이 여러개인 경우 반점으로 구분
+            }
+            coinIdSb.append(coinList.get(index).getCoinId());
+        }
+        params.put("markets", coinIdSb.toString());
         webInfVO.setParamMap(params);
 
         webInfVO.setUri("https://api.upbit.com/v1/ticker");
@@ -102,7 +114,8 @@ public class UpbitApiServiceImpl implements UpbitApiService
 
         Map resultMap = okHttpService.execHttpGet(webInfVO);
 
-        Gson gson = new Gson();
+//        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
         Type listType = new TypeToken<ArrayList<UpbitApiVO>>(){}.getType();
         List<UpbitApiVO> resultList = gson.fromJson(resultMap.get("responseBody").toString(), listType);
 //            upbitApiDto = gson.fromJson(response.body().string(), UpbitApiDTO.class);
@@ -111,7 +124,9 @@ public class UpbitApiServiceImpl implements UpbitApiService
         int listSize = resultList.size();
         for(int index = 0; index < listSize; index++)
         {
-            log.debug("market : {}", resultList.get(index));
+            log.debug("market : {}", resultList.get(index).getMarket());
+            log.debug("openingPrice : {}", resultList.get(index).getOpeningPrice());
+
         }
 
         return resultMap;

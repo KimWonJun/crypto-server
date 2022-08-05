@@ -8,7 +8,7 @@
             ,  coin_name_ko
             ,  coin_name_eng
             ,  monitoring_yn
-          FROM coin_list
+          FROM awsdb.coin_list
          WHERE 0=0
         <if test="monitoring_yn != null">
            AND monitoring_yn = #{monitoring_yn}
@@ -16,11 +16,11 @@
     </select>
 
     <insert id="insertCoinPrice" parameterType="com.my.cryptoserver.upbitApi.vo.UpbitApiVO">
-        INSERT INTO coin_price
+        INSERT INTO awsdb.coin_price
         (
             coin_id
-          , current_date
-          , current_time
+          , input_date
+          , input_time
           , opening_price
           , high_price
           , low_price
@@ -30,18 +30,12 @@
           , acc_trade_price_24h
           , acc_trade_volume
           , acc_trade_volume_24h
-          , fst_reg_id
-          , fst_reg_dt
-          , fst_reg_ip
-          , lst_upt_id
-          , lst_upt_dt
-          , lst_upt_ip
         )
         values
         (
             #{coinId}
-          , #{currentDate}
-          , #{currentTime}
+          , #{inputDate}
+          , #{inputTime}
           , #{openingPrice}
           , #{highPrice}
           , #{lowPrice}
@@ -51,12 +45,6 @@
           , #{accTradePrice24h}
           , #{accTradeVolume}
           , #{accTradeVolume24h}
-          , {fstRegId}
-          , {fstRegDt}
-          , {fstRegIp}
-          , {lstUptId}
-          , {lstUptDt}
-          , {lstUptIp}
         )
     </insert>
 </mapper>

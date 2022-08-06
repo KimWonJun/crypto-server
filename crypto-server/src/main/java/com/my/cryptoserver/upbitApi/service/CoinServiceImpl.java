@@ -19,5 +19,9 @@ public class CoinServiceImpl implements CoinService
         return coinMapper.getCoinList();
     }
 
-
+    @Override
+    public int insertCoinPrice(UpbitApiVO upbitApiVO)
+    {
+        return coinMapper.insertCoinPrice(upbitApiVO);
+    }
 }

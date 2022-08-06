@@ -33,18 +33,18 @@
         )
         values
         (
-            #{coinId}
-          , #{inputDate}
-          , #{inputTime}
+            #{market}
+          , date_format(now(), '%Y%m%d')
+          , time_format(now(), '%H%i%s')
           , #{openingPrice}
           , #{highPrice}
           , #{lowPrice}
           , #{prevClosingPrice}
           , #{tradeVolume}
           , #{accTradePrice}
-          , #{accTradePrice24h}
+          , #{accTradePrice_24h}
           , #{accTradeVolume}
-          , #{accTradeVolume24h}
+          , #{accTradeVolume_24h}
         )
     </insert>
 </mapper>

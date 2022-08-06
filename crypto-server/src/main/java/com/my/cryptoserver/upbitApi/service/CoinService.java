@@ -7,4 +7,6 @@ import java.util.List;
 public interface CoinService
 {
     List<UpbitApiVO> getCoinList();
+
+    int insertCoinPrice(UpbitApiVO upbitAPIVO);
 }

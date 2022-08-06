@@ -33,15 +33,20 @@ public class OkHttpServiceImpl implements OkHttpService
                 .build();
 
         HttpUrl.Builder httpBuilder = HttpUrl.parse(webInfVO.getUri()).newBuilder();
-        httpBuilder.addQueryParameter("markets", "KRW-BTC");
+
+        Iterator<String> keys = webInfVO.getParamMap().keySet().iterator();
+        while (keys.hasNext())
+        {
+            String key = keys.next();
+            httpBuilder.addQueryParameter(key, (String) webInfVO.getParamMap().get(key));
+        }
 
         Request request = new Request.Builder().url(httpBuilder.build()).build();
 
         String responseBody = "";
-        try(Response response = client.newCall(request).execute()){
-
+        try(Response response = client.newCall(request).execute())
+        {
             responseBody = response.body().string();
-            log.debug("responseBody : {}", responseBody);
         }
         catch(IOException e)
         {

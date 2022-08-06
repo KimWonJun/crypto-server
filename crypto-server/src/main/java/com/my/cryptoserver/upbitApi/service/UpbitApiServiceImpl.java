@@ -102,7 +102,7 @@ public class UpbitApiServiceImpl implements UpbitApiService
         {
             if(index > 0)
             {
-                coinIdSb.append("%2C");     // coin이 여러개인 경우 반점으로 구분
+                coinIdSb.append(",");     // coin이 여러개인 경우 반점으로 구분
             }
             coinIdSb.append(coinList.get(index).getCoinId());
         }
@@ -114,19 +114,14 @@ public class UpbitApiServiceImpl implements UpbitApiService
 
         Map resultMap = okHttpService.execHttpGet(webInfVO);
 
-//        Gson gson = new Gson();
         Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
         Type listType = new TypeToken<ArrayList<UpbitApiVO>>(){}.getType();
         List<UpbitApiVO> resultList = gson.fromJson(resultMap.get("responseBody").toString(), listType);
-//            upbitApiDto = gson.fromJson(response.body().string(), UpbitApiDTO.class);
-        log.debug("coinList : {}", resultList);
 
         int listSize = resultList.size();
         for(int index = 0; index < listSize; index++)
         {
-            log.debug("market : {}", resultList.get(index).getMarket());
-            log.debug("openingPrice : {}", resultList.get(index).getOpeningPrice());
-
+            coinService.insertCoinPrice(resultList.get(index));
         }
 
         return resultMap;

@@ -26,7 +26,7 @@ public class UpbitApiVO
     private double prevClosingPrice;    // 전일 종가(UTC 0시 기준)
     private double tradeVolume;         // 가장 최근 거래량
     private double accTradePrice;       // 누적 거래대금(UTC 0시 기준)
-    private double accTradePrice24h;    // 24시간 누적 거래대금
+    private double accTradePrice_24h;    // 24시간 누적 거래대금
     private double accTradeVolume;      // 누적 거래량(UTC 0시 기준)
-    private double accTradeVolume24h;   // 24시간 누적 거래량
+    private double accTradeVolume_24h;   // 24시간 누적 거래량
 }

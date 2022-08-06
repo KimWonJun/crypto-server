@@ -10,5 +10,5 @@ public interface CoinMapper
 {
     List<UpbitApiVO> getCoinList();
 
-    void insertCoinPrice();
+    int insertCoinPrice(UpbitApiVO upbitApiVO);
 }

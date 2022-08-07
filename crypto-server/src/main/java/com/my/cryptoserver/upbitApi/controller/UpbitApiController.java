@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -26,10 +27,10 @@ public class UpbitApiController
         return upbitApiService.getAllAccounts();
     }
 
-    @RequestMapping(value="/orderChance", method= RequestMethod.GET)
-    public Map getOrderChance() throws UnsupportedEncodingException, NoSuchAlgorithmException
+    @RequestMapping(value="/orderChance/{coinId}", method= RequestMethod.GET)
+    public Map getOrderChance(@PathVariable String coinId) throws UnsupportedEncodingException, NoSuchAlgorithmException
     {
-        return upbitApiService.getOrderChance();
+        return upbitApiService.getOrderChance(coinId);
     }
 
     @RequestMapping(value="/getCoinPrice", method=RequestMethod.GET)

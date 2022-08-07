@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+import java.util.Map;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,6 +20,11 @@ public class UpbitApiVO
     private String coinNameEng;         // 코인이름(영문)
     private String monitoringYn;        // 모니터링 여부
 
+    // 주문가능정보
+    private List<Map> bidAccount;       // 매수 시 사용하는 화폐의 계좌 상태
+    private List<Map> askAccount;       // 매도 시 사용하는 화폐의 계좌상태
+
+    // 시세 Ticker
     private String market;              // 종목구분코드
     private int inputDate;              // 현재일자
     private int inputTime;              // 현재시간
@@ -29,4 +37,6 @@ public class UpbitApiVO
     private double accTradePrice_24h;    // 24시간 누적 거래대금
     private double accTradeVolume;      // 누적 거래량(UTC 0시 기준)
     private double accTradeVolume_24h;   // 24시간 누적 거래량
+
+
 }

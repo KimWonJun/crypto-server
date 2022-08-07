@@ -10,11 +10,11 @@ public interface UpbitApiService
 {
     Map getAllAccounts() throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
-    Map getOrderChance() throws NoSuchAlgorithmException, UnsupportedEncodingException;
+    Map getOrderChance(String coinId) throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
     Map getCoinPrice() throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
-    Map postOrder(WebInfVO webInfVO) throws NoSuchAlgorithmException, UnsupportedEncodingException;
+    Map postOrder(String coinId) throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
     Map orderSeperate() throws NoSuchAlgorithmException, UnsupportedEncodingException;
 

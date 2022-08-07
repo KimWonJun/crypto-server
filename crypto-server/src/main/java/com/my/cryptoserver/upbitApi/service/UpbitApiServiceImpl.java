@@ -28,19 +28,23 @@ public class UpbitApiServiceImpl implements UpbitApiService
     private static final Logger log = LogManager.getLogger(UpbitApiService.class);
 
     @Autowired
-    private HttpService webInfService;
+    private HttpService webInfService;  // REST API 요청을 위한 Service
 
     @Autowired
-    private OkHttpService okHttpService;
+    private OkHttpService okHttpService;    // WebSocket 요청을 위한 Service
 
     @Autowired
     private CoinService coinService;
 
+    /**
+     * author   : KimWonJun
+     * date     : 2022.06.05
+     * @return  :
+     * @throws  : NoSuchAlgorithmException, UnsupportedEncodingException
+     */
     @Override
     public Map getAllAccounts() throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
-        log.debug("upbitApiService getallAccounts");
-
         WebInfVO webInfVO = new WebInfVO();
 
         webInfVO.setUri("/v1/accounts?");
@@ -50,17 +54,12 @@ public class UpbitApiServiceImpl implements UpbitApiService
     }
 
     @Override
-    public Map getOrderChance() throws NoSuchAlgorithmException, UnsupportedEncodingException
+    public Map getOrderChance(String coinId) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
-        log.debug("upbitApiService getOrderChance");
-
         WebInfVO webInfVO = new WebInfVO();
 
-        List<UpbitApiVO> coinList = coinService.getCoinList();
-        log.debug("coinList : {}", coinList);
-
         HashMap<String, String> params = new HashMap<>();
-        params.put("market", "KRW-BTC");
+        params.put("market", coinId);
 
         webInfVO.setParamMap(params);
 
@@ -71,14 +70,19 @@ public class UpbitApiServiceImpl implements UpbitApiService
     }
 
     @Override
-    public Map postOrder(WebInfVO webInfVO) throws NoSuchAlgorithmException, UnsupportedEncodingException
+    public Map postOrder(String coinId) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
+        Map coinMap = getOrderChance(coinId);
+        coinMap.get("resultEntity");
+
         HashMap<String, String> params = new HashMap<>();
-        params.put("market", "KRW-BTC");
-        params.put("side", "bid");
+        params.put("market", coinId);
+        params.put("side", "ask");
         params.put("volume", "0.01");
         params.put("price", "100");
         params.put("ord_type", "limit");
+
+        WebInfVO webInfVO = new WebInfVO();
 
         webInfVO.setParamMap(params);
 

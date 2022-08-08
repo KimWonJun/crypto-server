@@ -21,22 +21,62 @@ public class UpbitApiController
     @Autowired
     private UpbitApiService upbitApiService;
 
+    /**
+     * 전체 자산 확인
+     * @return
+     * @throws UnsupportedEncodingException
+     * @throws NoSuchAlgorithmException
+     */
     @RequestMapping(value="/account", method= RequestMethod.GET)
     public Map getAllAccounts() throws UnsupportedEncodingException, NoSuchAlgorithmException
     {
         return upbitApiService.getAllAccounts();
     }
 
+    /**
+     * 주문 가능 정보 확인
+     * @param coinId
+     * @return
+     * @throws UnsupportedEncodingException
+     * @throws NoSuchAlgorithmException
+     */
     @RequestMapping(value="/orderChance/{coinId}", method= RequestMethod.GET)
     public Map getOrderChance(@PathVariable String coinId) throws UnsupportedEncodingException, NoSuchAlgorithmException
     {
         return upbitApiService.getOrderChance(coinId);
     }
 
+    /**
+     * 매수/매도 주문
+     * @param coinId
+     * @return
+     * @throws UnsupportedEncodingException
+     * @throws NoSuchAlgorithmException
+     */
     @RequestMapping(value="/order/{coinId}", method=RequestMethod.GET)
     public Map postOrder(@PathVariable String coinId) throws UnsupportedEncodingException, NoSuchAlgorithmException
     {
         return upbitApiService.postOrder(coinId);
+    }
+
+    /**
+     * 주문 상태 확인
+     * @return
+     */
+    @RequestMapping(value="/orderStatus", method=RequestMethod.GET)
+    public Map getOrderStatus()
+    {
+        return upbitApiService.getOrderStatus();
+    }
+
+    /**
+     * 주문 삭제
+     * @return
+     */
+    @RequestMapping(value="/order", method=RequestMethod.DELETE)
+    public Map deleteOrder()
+    {
+        return upbitApiService.deleteOrder();
     }
 
     @RequestMapping(value="/getCoinPrice", method=RequestMethod.GET)

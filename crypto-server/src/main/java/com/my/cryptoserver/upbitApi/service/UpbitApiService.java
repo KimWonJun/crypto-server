@@ -16,10 +16,16 @@ public interface UpbitApiService
 
     Map postOrder(String coinId) throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
+    Map getOrderStatus();
+
+    Map deleteOrder();
+
     Map orderSeperate() throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
     Map candleMinute() throws NoSuchAlgorithmException, UnsupportedEncodingException;
     Map candleDay() throws NoSuchAlgorithmException, UnsupportedEncodingException;
     Map candleWeek() throws NoSuchAlgorithmException, UnsupportedEncodingException;
     Map candleMonth() throws NoSuchAlgorithmException, UnsupportedEncodingException;
+
+
 }

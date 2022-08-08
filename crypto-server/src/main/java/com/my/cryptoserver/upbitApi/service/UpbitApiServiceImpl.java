@@ -127,6 +127,18 @@ public class UpbitApiServiceImpl implements UpbitApiService
     }
 
     @Override
+    public Map getOrderStatus()
+    {
+        return null;
+    }
+
+    @Override
+    public Map deleteOrder()
+    {
+        return null;
+    }
+
+    @Override
     public Map getCoinPrice() throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
         WebInfVO webInfVO = new WebInfVO();

@@ -33,6 +33,12 @@ public class UpbitApiController
         return upbitApiService.getOrderChance(coinId);
     }
 
+    @RequestMapping(value="/order/{coinId}", method=RequestMethod.GET)
+    public Map postOrder(@PathVariable String coinId) throws UnsupportedEncodingException, NoSuchAlgorithmException
+    {
+        return upbitApiService.postOrder(coinId);
+    }
+
     @RequestMapping(value="/getCoinPrice", method=RequestMethod.GET)
     public Map getCoinPrice() throws UnsupportedEncodingException, NoSuchAlgorithmException
     {

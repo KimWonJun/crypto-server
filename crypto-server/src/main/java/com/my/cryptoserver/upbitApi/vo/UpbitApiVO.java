@@ -1,6 +1,8 @@
 package com.my.cryptoserver.upbitApi.vo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,8 +23,25 @@ public class UpbitApiVO
     private String monitoringYn;        // 모니터링 여부
 
     // 주문가능정보
-    private List<Map> bidAccount;       // 매수 시 사용하는 화폐의 계좌 상태
-    private List<Map> askAccount;       // 매도 시 사용하는 화폐의 계좌상태
+    private String bidFee;          // 매수 수수료 비율
+    private String askFee;          // 매도 수수료 비율
+    private String makerBidFee;     // ?
+    private String makerAskFee;     // ?
+    @JsonProperty("bid_account")
+    private Map bidAccount;         // 매수 시 사용하는 화폐의 계좌 상태
+    @JsonProperty("ask_account")
+    private Map askAccount;         // 매도 시 사용하는 화폐의 계좌상태
+
+    // 주문
+    private String uuid;            // 주문 고유 id
+    private String side;            // 주문 종류
+    private String ordType;         // 주문방식
+    private String price;           // 주문 당시 화폐 가격
+    private String avgPrice;        // 체결가격의 평균가
+    private String state;           // 주문 상태
+    private String volume;          // 사용자가 입력한 주문량
+    private String remainingVolume; // 체결 후 남은 주문량
+    private String executedVolume;  // 체결된 양
 
     // 시세 Ticker
     private String market;              // 종목구분코드

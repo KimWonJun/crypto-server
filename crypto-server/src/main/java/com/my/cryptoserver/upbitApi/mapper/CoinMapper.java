@@ -11,4 +11,6 @@ public interface CoinMapper
     List<UpbitApiVO> getCoinList();
 
     int insertCoinPrice(UpbitApiVO upbitApiVO);
+
+    List<UpbitApiVO> getAllWaitOrder();
 }

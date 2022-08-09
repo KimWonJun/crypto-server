@@ -123,18 +123,58 @@ public class UpbitApiServiceImpl implements UpbitApiService
         log.debug("state : {}", resultVO.getState());
 
         return null;
-
     }
 
+    /**
+     * 주문 상태 확인
+     * @param uuid
+     * @return
+     */
     @Override
-    public Map getOrderStatus()
+    public Map getOrderStatus(String uuid)
     {
-        return null;
+        WebInfVO webInfVO = new WebInfVO();
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("uuid", uuid);
+
+        webInfVO.setParamMap(params);
+
+        webInfVO.setUri("/v1/order?");
+        webInfVO.setMethod("GET");
+
+        return webInfService.execHttpGet(webInfVO);
     }
 
+    /**
+     * 전체 주문 취소
+     * @return
+     */
     @Override
     public Map deleteOrder()
     {
+        WebInfVO webInfVO = new WebInfVO();
+        HashMap<String, String> params = new HashMap<>();
+
+        List<UpbitApiVO> orderList = coinService.getAllWaitOrder();
+        Map orderStatusMap = new HashMap<>();
+        String uuid = "";
+        for(UpbitApiVO vo : orderList)
+        {
+            uuid = vo.getUuid();
+            orderStatusMap = getOrderStatus(uuid);
+            if(orderStatusMap.get("state") != "done")       // 아직 주문 완료가 아니라면
+            {
+                params.put("uuid", uuid);
+                webInfVO.setParamMap(params);
+
+                webInfVO.setUri("/v1/order?");
+                webInfVO.setMethod("DELETE");
+
+                webInfService.execHttpDelete(webInfVO);     // 취소 주문
+            }
+        }
+
         return null;
     }
 

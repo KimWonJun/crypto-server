@@ -66,7 +66,7 @@ public class UpbitApiController
     @RequestMapping(value="/orderStatus", method=RequestMethod.GET)
     public Map getOrderStatus()
     {
-        return upbitApiService.getOrderStatus();
+        return null;
     }
 
     /**

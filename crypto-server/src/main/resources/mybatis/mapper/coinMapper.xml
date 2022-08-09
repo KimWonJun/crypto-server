@@ -47,4 +47,15 @@
           , #{accTradeVolume_24h}
         )
     </insert>
+
+    <select id="getAllWaitOrder" resultType="com.my.cryptoserver.upbitApi.vo.UpbitApiVO">
+        SELECT uuid
+            ,  coin_id
+            ,  input_date
+            ,  input_time
+            ,  order_status
+            ,  identifier
+          FROM awsdb.coin_order_list
+         WHERE order_status = 'wait'
+    </select>
 </mapper>

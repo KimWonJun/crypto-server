@@ -24,4 +24,9 @@ public class CoinServiceImpl implements CoinService
     {
         return coinMapper.insertCoinPrice(upbitApiVO);
     }
+
+    @Override
+    public List<UpbitApiVO> getAllWaitOrder() {
+        return coinMapper.getAllWaitOrder();
+    }
 }

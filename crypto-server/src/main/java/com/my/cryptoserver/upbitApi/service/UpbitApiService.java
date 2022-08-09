@@ -1,9 +1,11 @@
 package com.my.cryptoserver.upbitApi.service;
 
+import com.my.cryptoserver.upbitApi.vo.UpbitApiVO;
 import com.my.cryptoserver.webinf.vo.WebInfVO;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Map;
 
 public interface UpbitApiService
@@ -16,7 +18,7 @@ public interface UpbitApiService
 
     Map postOrder(String coinId) throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
-    Map getOrderStatus();
+    Map getOrderStatus(String uuid);
 
     Map deleteOrder();
 

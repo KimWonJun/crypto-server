@@ -48,6 +48,27 @@
         )
     </insert>
 
+    <insert id="insertCoinOrderResult" parameterType="com.my.cryptoserver.upbitApi.vo.UpbitApiVO">
+        INSERT INTO awsdb.coin_order_list
+        (
+              uuid
+            , coin_id
+            , input_date
+            , input_time
+            , order_status
+            , identifier
+        )
+        VALUES
+        (
+              #{uuid}
+            , #{market}
+            , date_format(now(), '%Y%m%d')
+            , time_format(now(), '%H%i%s')
+            , #{orderStatus}
+            , #{identifier}
+        )
+    </insert>
+
     <select id="getAllWaitOrder" resultType="com.my.cryptoserver.upbitApi.vo.UpbitApiVO">
         SELECT uuid
             ,  coin_id

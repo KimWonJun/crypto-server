@@ -122,6 +122,8 @@ public class UpbitApiServiceImpl implements UpbitApiService
         log.debug("uuid : {}", resultVO.getUuid());
         log.debug("state : {}", resultVO.getState());
 
+        coinService.insertCoinOrderResult(resultVO);        // 코인 주문 정보 입력
+
         return null;
     }
 

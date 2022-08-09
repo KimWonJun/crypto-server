@@ -42,6 +42,7 @@ public class UpbitApiVO
     private String volume;          // 사용자가 입력한 주문량
     private String remainingVolume; // 체결 후 남은 주문량
     private String executedVolume;  // 체결된 양
+    private String identifier;      // 주문 고유값(임의로 지정)
 
     // 시세 Ticker
     private String market;              // 종목구분코드

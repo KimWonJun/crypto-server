@@ -8,11 +8,9 @@ public interface CoinService
 {
     List<UpbitApiVO> getCoinList();
 
-    int insertCoinPrice(UpbitApiVO upbitAPIVO);
+    int insertCoinPrice(UpbitApiVO upbitApiVO);
 
-
-
-
+    int insertCoinOrderResult(UpbitApiVO upbitApiVO);
 
     List<UpbitApiVO> getAllWaitOrder();
 }

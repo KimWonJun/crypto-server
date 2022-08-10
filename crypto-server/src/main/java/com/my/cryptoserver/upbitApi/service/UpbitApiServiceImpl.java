@@ -33,7 +33,7 @@ public class UpbitApiServiceImpl implements UpbitApiService
     private OkHttpService okHttpService;    // WebSocket 요청을 위한 Service
 
     @Autowired
-    private CoinService coinService;
+    private CoinService coinService;    // 코인 정보 관리 Service
 
     /**
      * author   : KimWonJun
@@ -85,8 +85,8 @@ public class UpbitApiServiceImpl implements UpbitApiService
         params.put("market", coinId);
         params.put("side", "ask");      // 매도
         params.put("volume", (String) jsonMap.get("balance"));  // 주문가능 금액/수량 전체
-//        params.put("price", "100");       // 시장가 매도시 불필요
-        params.put("ord_type", "market");   // 시장가 매도
+        params.put("price", "7800");       // 시장가 매도시 불필요
+        params.put("ord_type", "limit");   // 시장가 매도
 
         WebInfVO webInfVO = new WebInfVO();
 
@@ -94,31 +94,32 @@ public class UpbitApiServiceImpl implements UpbitApiService
 
         webInfVO.setUri("/v1/orders");
         webInfVO.setMethod("POST");
-//        Map returnMap = webInfService.execHttpPost(webInfVO);
-//        log.debug("toString : {}", returnMap.get("resultEntity").toString());
+        Map returnMap = webInfService.execHttpPost(webInfVO);
+        log.debug("toString : {}", returnMap.get("resultEntity").toString());
         // 테스트용 샘플 주문 결과 json String
-        String jsonSample = "{\n" +
-                "  \"uuid\": \"cdd92199-2897-4e14-9448-f923320408ad\",\n" +
-                "  \"side\": \"bid\",\n" +
-                "  \"ord_type\": \"limit\",\n" +
-                "  \"price\": \"100.0\",\n" +
-                "  \"avg_price\": \"0.0\",\n" +
-                "  \"state\": \"wait\",\n" +
-                "  \"market\": \"KRW-BTC\",\n" +
-                "  \"created_at\": \"2018-04-10T15:42:23+09:00\",\n" +
-                "  \"volume\": \"0.01\",\n" +
-                "  \"remaining_volume\": \"0.01\",\n" +
-                "  \"reserved_fee\": \"0.0015\",\n" +
-                "  \"remaining_fee\": \"0.0015\",\n" +
-                "  \"paid_fee\": \"0.0\",\n" +
-                "  \"locked\": \"1.0015\",\n" +
-                "  \"executed_volume\": \"0.0\",\n" +
-                "  \"trades_count\": 0\n" +
-                "}";
+//        String jsonSample = "{\n" +
+//                "  \"uuid\": \"cdd92199-2897-4e14-9448-f923320408ad\",\n" +
+//                "  \"side\": \"bid\",\n" +
+//                "  \"ord_type\": \"limit\",\n" +
+//                "  \"price\": \"100.0\",\n" +
+//                "  \"avg_price\": \"0.0\",\n" +
+//                "  \"state\": \"wait\",\n" +
+//                "  \"market\": \"KRW-BTC\",\n" +
+//                "  \"created_at\": \"2018-04-10T15:42:23+09:00\",\n" +
+//                "  \"volume\": \"0.01\",\n" +
+//                "  \"remaining_volume\": \"0.01\",\n" +
+//                "  \"reserved_fee\": \"0.0015\",\n" +
+//                "  \"remaining_fee\": \"0.0015\",\n" +
+//                "  \"paid_fee\": \"0.0\",\n" +
+//                "  \"locked\": \"1.0015\",\n" +
+//                "  \"executed_volume\": \"0.0\",\n" +
+//                "  \"trades_count\": 0\n" +
+//                "}";
 
         Gson fieldGson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
         Type voType = new TypeToken<UpbitApiVO>(){}.getType();
-        UpbitApiVO resultVO = fieldGson.fromJson(jsonSample, voType);
+//        UpbitApiVO resultVO = fieldGson.fromJson(jsonSample, voType);
+        UpbitApiVO resultVO = fieldGson.fromJson(returnMap.get("resultEntity").toString(), voType);
         log.debug("uuid : {}", resultVO.getUuid());
         log.debug("state : {}", resultVO.getState());
 
@@ -161,11 +162,18 @@ public class UpbitApiServiceImpl implements UpbitApiService
         List<UpbitApiVO> orderList = coinService.getAllWaitOrder();
         Map orderStatusMap = new HashMap<>();
         String uuid = "";
+
+        Gson fieldGson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
         for(UpbitApiVO vo : orderList)
         {
             uuid = vo.getUuid();
             orderStatusMap = getOrderStatus(uuid);
-            if(orderStatusMap.get("state") != "done")       // 아직 주문 완료가 아니라면
+
+            Type voType = new TypeToken<UpbitApiVO>(){}.getType();
+//        UpbitApiVO resultVO = fieldGson.fromJson(jsonSample, voType);
+            UpbitApiVO resultVO = fieldGson.fromJson(orderStatusMap.get("resultEntity").toString(), voType);
+
+            if(resultVO.getState() != "done")       // 아직 주문 완료가 아니라면
             {
                 params.put("uuid", uuid);
                 webInfVO.setParamMap(params);

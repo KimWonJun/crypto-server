@@ -64,7 +64,7 @@
             , #{market}
             , date_format(now(), '%Y%m%d')
             , time_format(now(), '%H%i%s')
-            , #{orderStatus}
+            , #{state}
             , #{identifier}
         )
     </insert>
@@ -74,7 +74,7 @@
             ,  coin_id
             ,  input_date
             ,  input_time
-            ,  order_status
+            ,  order_status as state
             ,  identifier
           FROM awsdb.coin_order_list
          WHERE order_status = 'wait'

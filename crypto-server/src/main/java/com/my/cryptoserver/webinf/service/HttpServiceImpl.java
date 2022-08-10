@@ -195,11 +195,35 @@ public class HttpServiceImpl implements HttpService
                 }
                 break;
 
-            case "PUT":
+            case "PUT":try {
+                HttpPost postRequest = new HttpPost(SERVERURL + webInfVO.getUri());
+                postRequest.setHeader("Content-Type", "application/json");
+                postRequest.addHeader("Authorization", authenticationToken);
+                postRequest.setEntity(new StringEntity(new Gson().toJson(params)));
+
+                response = client.execute(postRequest);
+                entity = response.getEntity();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
                 break;
 
             case "DELETE":
-                break;
+                httpRequest.setURI(URI.create(SERVERURL + webInfVO.getUri() + queryString));
+                httpRequest.setHeader("Content-Type", "application/json");
+                httpRequest.addHeader("Authorization", authenticationToken);
+
+                try
+                {
+                    response = client.execute(httpRequest);
+                    entity = response.getEntity();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
         }
         rtnMap = setResultMap(response);
 

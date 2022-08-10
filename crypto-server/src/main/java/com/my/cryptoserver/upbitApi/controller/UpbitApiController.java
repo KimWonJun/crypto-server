@@ -63,10 +63,10 @@ public class UpbitApiController
      * 주문 상태 확인
      * @return
      */
-    @RequestMapping(value="/orderStatus", method=RequestMethod.GET)
-    public Map getOrderStatus()
+    @RequestMapping(value="/orderStatus/{uuid}", method=RequestMethod.GET)
+    public Map getOrderStatus(@PathVariable String uuid)
     {
-        return null;
+        return upbitApiService.getOrderStatus(uuid);
     }
 
     /**

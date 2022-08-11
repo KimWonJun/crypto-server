@@ -25,6 +25,9 @@ dependencies {
 	// spring-boot
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.4'
+	// spring batch
+	implementation 'org.springframework.boot:spring-boot-starter-batch'
+
 
 	// http 관련 라이브러리
 	implementation 'org.apache.httpcomponents:httpclient:4.5.13'

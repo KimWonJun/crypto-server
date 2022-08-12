@@ -6,12 +6,15 @@ import org.apache.logging.log4j.Logger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+@EnableBatchProcessing      // 배치 기능 활성화
 @RequiredArgsConstructor // 생성자 DI를 위한 lombok 어노테이션
 @Configuration
 public class TestBatchConfiguration
@@ -22,10 +25,11 @@ public class TestBatchConfiguration
 
     @Bean
     public Job simpleJob() {
-        return jobBuilderFactory.get("simpleJob")
+        Job job =  jobBuilderFactory.get("simpleJob")
+                .incrementer(new RunIdIncrementer())
                 .start(simpleStep1())
-                .incrementer(new UniqueRunIdIncrementer())
                 .build();
+        return job;
     }
 
     @Bean

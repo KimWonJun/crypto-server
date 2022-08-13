@@ -46,6 +46,7 @@ public class UpbitApiVO
 
     // 시세 Ticker
     private String market;              // 종목구분코드
+    private String tradePrice;          // 종가(현재가)
     private int inputDate;              // 현재일자
     private int inputTime;              // 현재시간
     private double openingPrice;        // 시가

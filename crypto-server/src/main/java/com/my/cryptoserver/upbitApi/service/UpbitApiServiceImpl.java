@@ -85,7 +85,7 @@ public class UpbitApiServiceImpl implements UpbitApiService
         params.put("market", coinId);
         params.put("side", "ask");      // 매도
         params.put("volume", (String) jsonMap.get("balance"));  // 주문가능 금액/수량 전체
-        params.put("price", "7800");       // 시장가 매도시 불필요
+//        params.put("price", "7800");       // 시장가 매도시 불필요
         params.put("ord_type", "limit");   // 시장가 매도
 
         WebInfVO webInfVO = new WebInfVO();

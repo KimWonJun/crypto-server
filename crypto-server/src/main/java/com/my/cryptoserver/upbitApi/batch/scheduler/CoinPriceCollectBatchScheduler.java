@@ -27,7 +27,7 @@ public class CoinPriceCollectBatchScheduler
     @Autowired
     private CoinPriceCollectConfig coinPriceCollectConfig;
 
-    @Scheduled(cron = "0/10 * * * * *")
+//    @Scheduled(cron = "0/10 * * * * *")
     public void runBatch() throws JobInstanceAlreadyCompleteException
             , JobExecutionAlreadyRunningException
             , JobParametersInvalidException

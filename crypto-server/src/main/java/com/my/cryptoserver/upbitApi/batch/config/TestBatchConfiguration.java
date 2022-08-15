@@ -16,14 +16,14 @@ import org.springframework.context.annotation.Configuration;
 
 //@EnableBatchProcessing      // 배치 기능 활성화
 @RequiredArgsConstructor // 생성자 DI를 위한 lombok 어노테이션
-@Configuration
+//@Configuration
 public class TestBatchConfiguration
 {
     private static final Logger log = LogManager.getLogger(TestBatchConfiguration.class);
     private final JobBuilderFactory jobBuilderFactory; // 생성자 DI 받음
     private final StepBuilderFactory stepBuilderFactory; // 생성자 DI 받음
 
-    @Bean
+//    @Bean
     public Job simpleJob() {
         Job job =  jobBuilderFactory.get("simpleJob")
                 .incrementer(new RunIdIncrementer())
@@ -32,7 +32,7 @@ public class TestBatchConfiguration
         return job;
     }
 
-    @Bean
+//    @Bean
     public Step simpleStep1() {
         return stepBuilderFactory.get("simpleStep1")
                 .tasklet((contribution, chunkContext) -> {

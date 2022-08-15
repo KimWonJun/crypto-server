@@ -16,9 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@EnableBatchProcessing      // 배치 기능 활성화
+//@EnableBatchProcessing      // 배치 기능 활성화
 @RequiredArgsConstructor // 생성자 DI를 위한 lombok 어노테이션
-@Configuration
+//@Configuration
 public class CoinPriceCollectConfig
 {
     private static final Logger log = LogManager.getLogger(CoinPriceCollectConfig.class);

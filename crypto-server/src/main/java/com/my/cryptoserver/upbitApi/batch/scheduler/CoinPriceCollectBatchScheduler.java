@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 
-@Configuration
+//@Configuration
 @RequiredArgsConstructor
 public class CoinPriceCollectBatchScheduler
 {

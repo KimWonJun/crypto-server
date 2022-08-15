@@ -9,6 +9,8 @@ import org.quartz.JobExecutionException;
 import org.quartz.UnableToInterruptJobException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
+import java.time.LocalDateTime;
+
 public class QuartzTestJob extends QuartzJobBean implements InterruptableJob
 {
     private static final Logger log = LogManager.getLogger(QuartzTestJob.class);
@@ -16,7 +18,7 @@ public class QuartzTestJob extends QuartzJobBean implements InterruptableJob
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException
     {
-        log.info("1");
+        log.info("Quartz Test Job Executed : {}", LocalDateTime.now().toString());
     }
 
     @Override

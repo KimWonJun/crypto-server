@@ -1,5 +1,6 @@
 package com.my.cryptoserver.upbitApi.batch.config;
 
+import com.my.cryptoserver.batch.service.QuartzService;
 import com.my.cryptoserver.upbitApi.batch.scheduler.QuartzTestJob;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,8 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.quartz.JobBuilder.newJob;
 
@@ -22,33 +21,36 @@ public class QuartzTestBatchConfig
 
     private final SchedulerFactoryBean schedulerFactoryBean;
 
-    @PostConstruct
-    public void start()
-    {
-        JobDetail testJobDetail = buildJobDetail(QuartzTestJob.class, "testJob", "test", new HashMap());
+    private final QuartzService quartzService;
 
-        try {
-            schedulerFactoryBean.getObject().scheduleJob(testJobDetail, buildJobTrigger("0/5 * * ? * * *"));
-        } catch (SchedulerException e) {
+    @PostConstruct
+    public void init()
+    {
+        try
+        {
+            quartzService.addCronJob(QuartzTestJob.class, "testJob", "test", null, "0/10 * * ? * * *");
+        }
+        catch (SchedulerException e)
+        {
             throw new RuntimeException(e);
         }
     }
 
-    public Trigger buildJobTrigger(String scheduleExp)
-    {
-        return TriggerBuilder.newTrigger()
-                .withSchedule(CronScheduleBuilder.cronSchedule(scheduleExp))
-                .build();
-    }
-
-    public JobDetail buildJobDetail(Class job, String name, String group, Map params)
-    {
-        JobDataMap jobDataMap = new JobDataMap();
-        jobDataMap.putAll(params);
-
-        return newJob(job).withIdentity(name, group)
-                .usingJobData(jobDataMap)
-                .build();
-    }
+//    public Trigger buildJobTrigger(String scheduleExp)
+//    {
+//        return TriggerBuilder.newTrigger()
+//                .withSchedule(CronScheduleBuilder.cronSchedule(scheduleExp))
+//                .build();
+//    }
+//
+//    public JobDetail buildJobDetail(Class job, String name, String group, Map params)
+//    {
+//        JobDataMap jobDataMap = new JobDataMap();
+//        jobDataMap.putAll(params);
+//
+//        return newJob(job).withIdentity(name, group)
+//                .usingJobData(jobDataMap)
+//                .build();
+//    }
 
 }

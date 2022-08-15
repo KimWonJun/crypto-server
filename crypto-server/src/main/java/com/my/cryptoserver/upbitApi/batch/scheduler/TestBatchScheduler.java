@@ -19,7 +19,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import java.util.HashMap;
 import java.util.Map;
 
-@Configuration
+//@Configuration
 @RequiredArgsConstructor
 public class TestBatchScheduler
 {
@@ -27,10 +27,10 @@ public class TestBatchScheduler
     private final JobLauncher jobLauncher;
     private final JobExplorer jobExplorer;
 
-    @Autowired
+//    @Autowired
     private TestBatchConfiguration testBatchConfig;
 
-    @Scheduled(cron = "0 * * * * *")
+//    @Scheduled(cron = "0 * * * * *")
     public void runBatch() throws JobInstanceAlreadyCompleteException
                                 , JobExecutionAlreadyRunningException
                                 , JobParametersInvalidException

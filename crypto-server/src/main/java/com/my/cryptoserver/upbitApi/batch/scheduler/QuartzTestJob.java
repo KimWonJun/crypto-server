@@ -15,6 +15,12 @@ public class QuartzTestJob extends QuartzJobBean implements InterruptableJob
 {
     private static final Logger log = LogManager.getLogger(QuartzTestJob.class);
 
+    /**
+     * methodName : executeInternal
+     * author : KimWonJun
+     * description :
+     * 작성일 : 2022-08-15
+     */
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException
     {

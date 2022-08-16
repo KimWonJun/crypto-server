@@ -23,34 +23,22 @@ public class QuartzTestBatchConfig
 
     private final QuartzService quartzService;
 
+    /**
+     * methodName : init
+     * author : Kim WonJun
+     * description : Quartz 테스트 config 클래스 init 메서드
+     * 작성일 : 2022.08.15
+     */
     @PostConstruct
     public void init()
     {
         try
         {
-            quartzService.addCronJob(QuartzTestJob.class, "testJob", "test", null, "0/10 * * ? * * *");
+            quartzService.addCronJob(QuartzTestJob.class, "testJob", "test", null, "0/20 * * ? * * *");
         }
         catch (SchedulerException e)
         {
             throw new RuntimeException(e);
         }
     }
-
-//    public Trigger buildJobTrigger(String scheduleExp)
-//    {
-//        return TriggerBuilder.newTrigger()
-//                .withSchedule(CronScheduleBuilder.cronSchedule(scheduleExp))
-//                .build();
-//    }
-//
-//    public JobDetail buildJobDetail(Class job, String name, String group, Map params)
-//    {
-//        JobDataMap jobDataMap = new JobDataMap();
-//        jobDataMap.putAll(params);
-//
-//        return newJob(job).withIdentity(name, group)
-//                .usingJobData(jobDataMap)
-//                .build();
-//    }
-
 }

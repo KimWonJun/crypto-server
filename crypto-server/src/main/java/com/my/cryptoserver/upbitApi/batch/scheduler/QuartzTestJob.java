@@ -18,7 +18,7 @@ public class QuartzTestJob extends QuartzJobBean implements InterruptableJob
     /**
      * methodName : executeInternal
      * author : KimWonJun
-     * description :
+     * description : Quartz 테스트 배치 execute
      * 작성일 : 2022-08-15
      */
     @Override

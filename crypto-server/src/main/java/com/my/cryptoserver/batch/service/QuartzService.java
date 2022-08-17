@@ -16,6 +16,12 @@ import java.util.Map;
 public class QuartzService {
     private final Scheduler scheduler;
 
+    /**
+     * methodName : addSimpleJob
+     * author : KimWonJun
+     * description : Quartz simpleJob 추가 메서드
+     * 작성일 : 2022-08-17
+     */
     public void addSimpleJob(Class job, String name, String desc, Map params, Integer seconds) throws SchedulerException {
         JobDetail jobDetail = buildJobDetail(job, name, desc, params);
 
@@ -29,6 +35,12 @@ public class QuartzService {
         );
     }
 
+    /**
+     * methodName : addCronJob
+     * author : KimWonJun
+     * description : Quartz cron 스케줄링 Job 추가 메서드
+     * 작성일 : 2022-08-17
+     */
     public void addCronJob(Class job, String name, String desc, Map params, String expression) throws SchedulerException {
         JobDetail jobDetail = buildJobDetail(job, name, desc, params);
 
@@ -42,6 +54,12 @@ public class QuartzService {
         );
     }
 
+    /**
+     * methodName : buildJobDetail
+     * author : KimWonJun
+     * description : jobDetail 빌드 메서드
+     * 작성일 : 2022-08-17
+     */
     private JobDetail buildJobDetail(Class job, String name, String desc, Map params) {
         JobDataMap jobDataMap = new JobDataMap();
         if(params != null) jobDataMap.putAll(params);

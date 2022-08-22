@@ -1,3 +1,3 @@
 # crypto-server
 
---- Jenkins webhook 테스트 08/21 ---
+--- slack 알림 테스트 08/22 ---

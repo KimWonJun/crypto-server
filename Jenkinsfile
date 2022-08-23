@@ -1,4 +1,8 @@
 node {
+  environment{
+	registry = "kimwonjun/crypto-server-dev"
+	registryCredential = 'kimwonjun'
+  }
   stage('========== Clone repository ==========') {
     checkout scm
   }
@@ -6,7 +10,7 @@ node {
     app = docker.build("kimwonjun/crypto-server-dev")
   }
   stage('========== Push image ==========') {
-    docker.withRegistry('https://registry.hub.docker.com', 'kimwonjun') {
+    docker.withRegistry('', registryCredential) {
       app.push("${env.BUILD_NUMBER}")
       app.push("latest")
     }

@@ -1,5 +1,4 @@
 node {
-  stages {
     stage('========== Clone repository ==========') {
       checkout scm
     }
@@ -22,5 +21,4 @@ node {
         sh 'docker run -d --name app-crypto-server-dev -p 8081:8080 kimwonjun/crypto-server-dev:latest'
         }
     }
-  }
 }

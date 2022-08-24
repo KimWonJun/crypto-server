@@ -12,7 +12,7 @@ node {
       }
     }
     stage('========== Run Container on SSH Server ==========') {
-      docker.withServer ('ssh://43.200.219.169:22', 'cicd_jenkins') {
+      docker.withServer ('ssh://43.200.219.169:22', 'CICD_Jenkins') {
 		docker.withRegistry('https://registry.hub.docker.com', 'kimwonjun') {
 		  docker.pull('kimwonjun/crypto-server-dev:latest')
 		}

@@ -16,9 +16,9 @@ node {
                                              keyFileVariable: '', \
                                              passphraseVariable: '', \
                                              usernameVariable: '')]) {
-		  docker.withServer ('ssh://43.200.219.169:22', 'kimwonjun') {
+		  docker.withServer ('ssh://ec2-43-200-219-169.ap-northeast-2.compute.amazonaws.com', 'CICD_Jenkins') {
 			docker.withRegistry('https://registry.hub.docker.com', 'kimwonjun') {
-			  docker.pull('kimwonjun/crypto-server-dev:latest')
+			  sh 'docker.pull 'kimwonjun/crypto-server-dev:latest'
 			}
 			sh 'docker rmi $(docker images --filter "dangling=true" -q --no-trunc)'
 			sh 'docker ps -q --filter name=app-crypto-server-dev | grep -q . && docker rm -f \$(docker ps -aq --filter name=app-crypto-server-dev)'

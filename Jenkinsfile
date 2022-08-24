@@ -16,7 +16,7 @@ node {
                                              keyFileVariable: '', \
                                              passphraseVariable: '', \
                                              usernameVariable: '')]) {
-		  docker.withServer ('ssh://ec2-43-200-219-169.ap-northeast-2.compute.amazonaws.com', 'CICD_Jenkins') {
+		  docker.withServer ('ssh://43.200.219.169:22', 'kimwonjun') {
 			docker.withRegistry('https://registry.hub.docker.com', 'kimwonjun') {
 			  docker.pull('kimwonjun/crypto-server-dev:latest')
 			}

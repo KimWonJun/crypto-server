@@ -12,8 +12,8 @@ node {
       }
     }
     stage('========== Run Container on SSH Server ==========') {
-      docker.withServer ('ssh://ec2-43-200-219-169.ap-northeast-2.compute.amazonaws.com', 'cicd_jenkins') {
-        docker.withRegistry('https://registry.hub.docker.com', 'kimwonjun') {
+      docker.withServer ('ssh://43.200.219.169:22', 'cicd_jenkins') {
+		docker.withRegistry('https://registry.hub.docker.com', 'kimwonjun') {
 		  docker.pull('kimwonjun/crypto-server-dev:latest')
 		}
         sh 'docker rmi $(docker images --filter "dangling=true" -q --no-trunc)'

@@ -24,27 +24,10 @@ pipeline {
             }
         }
 
-        stage('build gradle') {
-            steps {
-				sh 'chmod +x ./gradlew'
-                sh './gradlew clean build'
-
-                sh 'ls -al ./build'
-            }
-            post {
-                success {
-                    echo 'gradle build success'
-                }
-
-                failure {
-                    echo 'gradle build failed'
-                }
-            }
-        }
-
         stage('dockerizing'){
             steps{
                 sh 'docker build -t kimwonjun/crypto-server-dev:$BUILD_NUMBER .'
+				sh 'docker build -t kimwonjun/crypto-server-dev:latest .'
             }
         }
 

@@ -63,7 +63,7 @@ pipeline {
 					continueOnError:false, failOnError:true,
 					publishers: [
 						sshPublisherDesc(
-							configName:'CICD_Jenkins',
+							configName:'ubuntu',
 							transfers : [
 								sshTransfer(
 									execCommand:'echo "Hello SSH" > helloworld.txt'

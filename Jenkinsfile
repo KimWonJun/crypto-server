@@ -51,10 +51,12 @@ pipeline {
 
         stage('Push Image to Docker hub') {
             steps {
-				withDockerRegistry([credentialsId:'kimwonjun', url:'https://registry.hub.docker.com']) {
+				withCredentials([string(credentialsId: 'kimwonjun', variable: 'dockerHubPwd')]) {
+                    sh "docker login -u kimwonjun -p ${dockerHubPwd}"
+                }
 					sh 'docker push kimwonjun/crypto-server-dev:latest'
 					sh 'docker push kimwonjun/crypto-server-dev:$BUILD_NUMBER'
-				}
+				
             }
 
             post {

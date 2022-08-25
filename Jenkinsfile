@@ -51,7 +51,7 @@ pipeline {
 
         stage('Push Image to Docker hub') {
             steps {
-				withCredentials([usernamePassword(credentialsId: 'kimwonjun', variable: 'dockerHubPwd')]) {
+				withCredentials([string(credentialsId: 'kimwonjun', variable: 'dockerHubPwd')]) {
                     sh "docker login -u kimwonjun -p ${dockerHubPwd}"
 					sh 'docker push kimwonjun/crypto-server-dev:latest'
 					sh 'docker push kimwonjun/crypto-server-dev:$BUILD_NUMBER'

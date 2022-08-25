@@ -1,11 +1,5 @@
 pipeline {
     agent any
-	environment {
-		DOCKER_PULL_IMAGE = 'docker pull kimwonjun/crypto-server-dev:latest'
-		DOCKER_REMOVE_CONTAINER = 'docker ps -q --filter name=app-crypto-server-dev | grep -q . && docker rm -f $(docker ps --filter name=app-crypto-server-dev)'
-		DOCKER_REMOVE_IMAGE = 'docker rmi \"$\"(docker images --filter "dangling=true" -q --no-trunc)'
-		DOCKER_RUN_CONTAINER = 'docker run -d --name app-crypto-server-dev -p 8081:8080 kimwonjun/crypto-server-dev:latest'
-	}
     stages {
         stage('Prepare') {
             agent any
@@ -70,10 +64,10 @@ pipeline {
 							configName : 'Crypto_Dev_Server',
 							transfers : [
 								sshTransfer(
-									execCommand:'${DOCKER_PULL_IMAGE}'
-									execCommand:'${DOCKER_REMOVE_CONTAINER}'
-									execCommand:'${DOCKER_REMOVE_IMAGE}'
-									execCommand:'${DOCKER_RUN_CONTAINER}'
+									execCommand:'docker pull kimwonjun/crypto-server-dev:latest'
+									execCommand:'docker ps -q --filter name=app-crypto-server-dev | grep -q . && docker stop app-crypto-server-dev docker rm app-crypto-server-dev'
+									execCommand:'docker rmi \\$(docker images --filter "dangling=true" -q --no-trunc)'
+									execCommand:'docker run -d --name app-crypto-server-dev -p 8081:8080 kimwonjun/crypto-server-dev:latest'
 								)
 							]
 						)

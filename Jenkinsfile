@@ -73,10 +73,7 @@ pipeline {
 									execCommand:'docker rm app-crypto-server-dev'
 								),
 								sshTransfer(
-									execCommand:'docker run -d --name app-crypto-server-dev -p 8081:8080 kimwonjun/crypto-server-dev:latest'
-								),
-								sshTransfer(
-									execCommand:'docker rmi prune'
+									execCommand:'docker run -d --name app-crypto-server-dev -e "SPRING_PROFILES_ACTIVE=dev" -p 8081:8080 kimwonjun/crypto-server-dev:latest'
 								)
 							]
 						)

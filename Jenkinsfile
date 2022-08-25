@@ -66,8 +66,8 @@ pipeline {
 							transfers : [
 								sshTransfer(
 									execCommand:'docker pull kimwonjun/crypto-server-dev:latest'
-									execCommand:'docker ps -q --filter name=app-crypto-server-dev | grep -q . && docker rm -f "$"(docker ps --filter name=app-crypto-server-dev)'				
-									execCommand:'docker rmi "$"(docker images --filter "dangling=true" -q --no-trunc)'
+									execCommand:'docker ps -q --filter name=app-crypto-server-dev | grep -q . && docker rm -f \"$\"(docker ps --filter name=app-crypto-server-dev)'				
+									execCommand:'docker rmi \"$\"(docker images --filter "dangling=true" -q --no-trunc)'
 									execCommand:'docker run -d --name app-crypto-server-dev -p 8081:8080 kimwonjun/crypto-server-dev:latest'
 								)
 							]

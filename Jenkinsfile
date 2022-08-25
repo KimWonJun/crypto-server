@@ -51,7 +51,7 @@ pipeline {
 
         stage('Push Image to Docker hub') {
             steps {
-				withDockerRegistry([credentialsId: 'kimwonjun', url:'https://registry.hub.docker.com']) {
+				withDockerRegistry([credentialsId: 'kimwonjun', url:'']) {
 					sh 'docker push kimwonjun/crypto-server-dev:latest'
 					sh 'docker push kimwonjun/crypto-server-dev:$BUILD_NUMBER'
                 }

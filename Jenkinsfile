@@ -57,28 +57,21 @@ pipeline {
                 }
             }
         }
-		withCredentials([sshUserPrivateKey(credentialsId: 'dev_server')]) {
-			def remote = [:]
-			remote.name="test-ssh"
-			remote.host="43.200.219.169"
-			remote.allowAnyHosts = true
-            remote.user = ubuntu
-			stage('Run Container on SSH Server'){
-				steps{
-					sshPublisher(
-						publishers: [
-							sshPublisherDesc(
-								configName : 'dev_server',
-								transfers : [
-									sshTransfer(
-										execCommand:'echo "Hello SSH" > helloworld.txt'
-									)
-								]
-							)
-						]
-					)
-				}
-            }
+		stage('Run Container on SSH Server'){
+			steps{
+				sshPublisher(
+					publishers: [
+						sshPublisherDesc(
+							configName : 'Crypto_Dev_Server',
+							transfers : [
+								sshTransfer(
+									execCommand:'echo "Hello SSH" > helloworld.txt'
+								)
+							]
+						)
+					]
+				)
+			}
 		}
     }
 }

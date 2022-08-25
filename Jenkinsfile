@@ -45,18 +45,17 @@ pipeline {
 
         stage('dockerizing'){
             steps{
-                sh 'docker build -t kimwonjun/crypto-server-dev:$BUILD_NUMBER .'
+                sh 'docker . build -t kimwonjun/crypto-server-dev:$BUILD_NUMBER'
             }
         }
 
         stage('Push Image to Docker hub') {
             steps {
-				withCredentials([string(credentialsId: 'kimwonjun', variable: 'dockerHubPwd')]) {
+				withCredentials([usernamePassword(credentialsId: 'kimwonjun', passwordVariable: 'dockerHubPwd')]) {
                     sh "docker login -u kimwonjun -p ${dockerHubPwd}"
-                }
 					sh 'docker push kimwonjun/crypto-server-dev:latest'
 					sh 'docker push kimwonjun/crypto-server-dev:$BUILD_NUMBER'
-				
+                }
             }
 
             post {

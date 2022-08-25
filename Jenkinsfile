@@ -70,10 +70,12 @@ pipeline {
 		stage('Run Container on SSH Server'){
 			steps{
                 echo 'SSH'
-                sshagent (credentials: ['kimwonjun']) {
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@43.200.219.169 'docker pull kimwonjun/crypto-server-dev'"
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@43.200.219.169 'docker ps -q --filter name=app-crypto-server-dev | grep -q . && docker rm -f \$(docker ps -aq --filter name=app-crypto-server-dev)'"
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@43.200.219.169 'docker run -d --name app-crypto-server-dev -p 8081:8080 kimwonjun/crypto-server-dev'"
+                sshagent (credentials: ['CICD_Jenkins']) {
+					withDockerRegistry([credentialsId:'kimwonjun', url:'https://registry.hub.docker.com']) {
+						sh "ssh -o StrictHostKeyChecking=no ubuntu@43.200.219.169 'docker pull kimwonjun/crypto-server-dev'"
+						sh "ssh -o StrictHostKeyChecking=no ubuntu@43.200.219.169 'docker ps -q --filter name=app-crypto-server-dev | grep -q . && docker rm -f \$(docker ps -aq --filter name=app-crypto-server-dev)'"
+						sh "ssh -o StrictHostKeyChecking=no ubuntu@43.200.219.169 'docker run -d --name app-crypto-server-dev -p 8081:8080 kimwonjun/crypto-server-dev'"
+					}
                 }
 
             }

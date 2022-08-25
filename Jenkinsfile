@@ -45,7 +45,7 @@ pipeline {
 
         stage('dockerizing'){
             steps{
-                sh 'docker . build -t kimwonjun/crypto-server-dev:$BUILD_NUMBER'
+                sh 'docker build -t kimwonjun/crypto-server-dev:$BUILD_NUMBER .'
             }
         }
 

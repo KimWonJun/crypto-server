@@ -64,5 +64,10 @@ pipeline {
 				)
 			}
 		}
+		stage('Send Alarm to Slack Messenger') {
+			steps {
+				slackSend(channel:'#crypto프로젝트-알림-서비스', color:'#00FF00', message:'Deploy Finished', teamDomain:'crypto-Project');
+			}
+		}
     }
 }

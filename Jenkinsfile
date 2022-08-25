@@ -65,17 +65,19 @@ pipeline {
             remote.user = ubuntu
 			stage('Run Container on SSH Server'){
 				steps{
-				sshPublisher(
-					publishers: [
-						sshPublisherDesc(
-							transfers : [
-								sshTransfer(
-									execCommand:'echo "Hello SSH" > helloworld.txt'
-								)
-							]
-						)
-					]
-				)
+					sshPublisher(
+						publishers: [
+							sshPublisherDesc(
+								configName : 'dev_server',
+								transfers : [
+									sshTransfer(
+										execCommand:'echo "Hello SSH" > helloworld.txt'
+									)
+								]
+							)
+						]
+					)
+				}
             }
 		}
     }

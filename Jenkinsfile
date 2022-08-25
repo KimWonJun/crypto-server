@@ -70,10 +70,10 @@ pipeline {
 							configName : 'Crypto_Dev_Server',
 							transfers : [
 								sshTransfer(
-									execCommand:${DOCKER_PULL_IMAGE}
-									execCommand:${DOCKER_REMOVE_CONTAINER}
-									execCommand:${DOCKER_REMOVE_IMAGE}
-									execCommand:${DOCKER_RUN_CONTAINER}
+									execCommand:'${DOCKER_PULL_IMAGE}'
+									execCommand:'${DOCKER_REMOVE_CONTAINER}'
+									execCommand:'${DOCKER_REMOVE_IMAGE}'
+									execCommand:'${DOCKER_RUN_CONTAINER}'
 								)
 							]
 						)

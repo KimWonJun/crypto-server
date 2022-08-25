@@ -66,7 +66,7 @@ pipeline {
 							configName:'CICD_Jenkins',
 							transfers : [
 								sshTransfer(
-									execCommand:"echo "Hello SSH" > helloworld.txt
+									execCommand:'echo "Hello SSH" > helloworld.txt'
 								)
 							]
 						)

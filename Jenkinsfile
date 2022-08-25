@@ -61,7 +61,7 @@ pipeline {
 			steps{
 				sshPublisher(
 					continueOnError:false, failOnError:true,
-					publisher: [
+					publishers: [
 						sshPublisherDesc(
 							configName:'CICD_Jenkins',
 							transfers : [

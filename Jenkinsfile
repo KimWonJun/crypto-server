@@ -63,7 +63,7 @@ pipeline {
 					continueOnError:false, failOnError:true,
 					publishers: [
 						sshPublisherDesc(
-							configName:'ubuntu',
+							configName:'dev-server',
 							transfers : [
 								sshTransfer(
 									execCommand:'echo "Hello SSH" > helloworld.txt'

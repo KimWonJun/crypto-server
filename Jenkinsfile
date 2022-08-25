@@ -1,29 +1,82 @@
-node {
-    stage('========== Clone repository ==========') {
-      checkout scm
-    }
-    stage('========== Build image ==========') {
-      app = docker.build("kimwonjun/crypto-server-dev")
-    }
-    stage('========== Push image ==========') {
-      docker.withRegistry('https://registry.hub.docker.com', 'kimwonjun') {
-        app.push("${env.BUILD_NUMBER}")
-        app.push("latest")
-      }
-    }
-    stage('========== Run Container on SSH Server ==========') {
-      withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'CICD_Jenkins', \
-                                             keyFileVariable: '', \
-                                             passphraseVariable: '', \
-                                             usernameVariable: '')]) {
-		  docker.withServer ('ssh://ec2-43-200-219-169.ap-northeast-2.compute.amazonaws.com', 'CICD_Jenkins') {
-			docker.withRegistry('https://registry.hub.docker.com', 'kimwonjun') {
-			  sh 'docker.pull 'kimwonjun/crypto-server-dev:latest'
-			}
-			sh 'docker rmi $(docker images --filter "dangling=true" -q --no-trunc)'
-			sh 'docker ps -q --filter name=app-crypto-server-dev | grep -q . && docker rm -f \$(docker ps -aq --filter name=app-crypto-server-dev)'
-			sh 'docker run -d --name app-crypto-server-dev -p 8081:8080 kimwonjun/crypto-server-dev:latest'
-			}
+pipeline {
+    agent any
+
+    stages {
+        stage('Prepare') {
+            agent any
+
+            steps {
+                checkout scm
+            }
+
+            post {
+
+                success {
+                    echo 'prepare success'
+                }
+
+                always {
+                    echo 'done prepare'
+                }
+
+                cleanup {
+                    echo 'after all other post conditions'
+                }
+            }
+        }
+
+        stage('build gradle') {
+            steps {
+				sh 'chmod +x ./gradlew'
+                sh './gradlew clean build'
+
+                sh 'ls -al ./build'
+            }
+            post {
+                success {
+                    echo 'gradle build success'
+                }
+
+                failure {
+                    echo 'gradle build failed'
+                }
+            }
+        }
+
+        stage('dockerizing'){
+            steps{
+                sh 'docker build -t kimwonjun/crypto-server-dev:$BUILD_NUMBER .'
+            }
+        }
+
+        stage('Push Image to Docker hub') {
+            steps {
+				withDockerRegistry([credentialsId:'kimwonjun', url:'https://registry.hub.docker.com']) {
+					sh 'docker push kimwonjun/crypto-server-dev:latest'
+					sh 'docker push kimwonjun/crypto-server-dev:$BUILD_NUMBER'
+				}
+            }
+
+            post {
+                success {
+                    echo 'success'
+                }
+
+                failure {
+                    echo 'failed'
+                }
+            }
+        }
+		stage('Run Container on SSH Server'){
+			steps{
+                echo 'SSH'
+                sshagent (credentials: ['kimwonjun']) {
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@43.200.219.169 'docker pull kimwonjun/crypto-server-dev'"
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@43.200.219.169 'docker ps -q --filter name=app-crypto-server-dev | grep -q . && docker rm -f \$(docker ps -aq --filter name=app-crypto-server-dev)'"
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@43.200.219.169 'docker run -d --name app-crypto-server-dev -p 8081:8080 kimwonjun/crypto-server-dev'"
+                }
+
+            }
 		}
     }
 }

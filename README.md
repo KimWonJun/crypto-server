@@ -19,6 +19,7 @@
 
  DB
 * MySQL
+* Amazon RDS
 
  배치
 * SpringBatch
@@ -26,8 +27,12 @@
  스케쥴링
 * Quartz
 
- 메시지
+ 메시징
 * Slack
+
+ 서버
+* Amazon EC2
+* Tomcat
 
 ### 인프라 구성도
 ![InfraStructure](https://user-images.githubusercontent.com/52263410/187027818-03dbb7b6-522e-4e3c-b314-43b575fce51d.jpg)

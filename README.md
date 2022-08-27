@@ -30,4 +30,4 @@
 * Slack
 
 ### 인프라 구성도
-![Infra Structure](https://user-images.githubusercontent.com/52263410/187027233-c3af787f-3795-4e53-806b-3077de3dd0b1.PNG)
+![InfraStructure](https://user-images.githubusercontent.com/52263410/187027818-03dbb7b6-522e-4e3c-b314-43b575fce51d.jpg)

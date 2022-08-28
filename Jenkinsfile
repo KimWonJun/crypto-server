@@ -24,27 +24,10 @@ pipeline {
             }
         }
 
-        stage('build gradle') {
-            steps {
-				sh 'chmod +x ./gradlew'
-                sh './gradlew clean build'
-
-                sh 'ls -al ./build'
-            }
-            post {
-                success {
-                    echo 'gradle build success'
-                }
-
-                failure {
-                    echo 'gradle build failed'
-                }
-            }
-        }
-
         stage('dockerizing'){
             steps{
                 sh 'docker build -t kimwonjun/crypto-server-dev:$BUILD_NUMBER .'
+				sh 'docker build -t kimwonjun/crypto-server-dev:latest .'
             }
         }
 
@@ -65,14 +48,25 @@ pipeline {
 							transfers : [
 								sshTransfer(
 									execCommand:'docker pull kimwonjun/crypto-server-dev:latest'
-									execCommand:'docker ps -q --filter name=app-crypto-server-dev | grep -q . && docker rm -f \\$(docker ps --filter name=app-crypto-server-dev)'
-									execCommand:'docker rmi \\$(docker images --filter "dangling=true" -q --no-trunc)'
-									execCommand:'docker run -d --name app-crypto-server-dev -p 8081:8080 kimwonjun/crypto-server-dev:latest'
+								),
+								sshTransfer(
+									execCommand:'docker stop app-crypto-server-dev'
+								),
+								sshTransfer(
+									execCommand:'docker rm app-crypto-server-dev'
+								),
+								sshTransfer(
+									execCommand:'docker run -d --name app-crypto-server-dev -e "SPRING_PROFILES_ACTIVE=dev" -p 8081:8080 kimwonjun/crypto-server-dev:latest'
 								)
 							]
 						)
 					]
 				)
+			}
+		}
+		stage('Send Alarm to Slack Messenger') {
+			steps {
+				slackSend(channel:'#crypto프로젝트-알림-서비스', color:'#00FF00', message:'Deploy Finished', teamDomain:'thecrypto-project', tokenCredentialId:'slack-notifier');
 			}
 		}
     }

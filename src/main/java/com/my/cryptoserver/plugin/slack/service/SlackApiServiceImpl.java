@@ -2,6 +2,8 @@ package com.my.cryptoserver.plugin.slack.service;
 
 import com.my.cryptoserver.upbitApi.controller.UpbitApiController;
 
+import com.slack.api.methods.MethodsClient;
+import com.slack.api.methods.response.chat.ChatPostMessageResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.slack.api.Slack;
@@ -25,42 +27,25 @@ public class SlackApiServiceImpl implements SlackApiService
     private String channel;
 
     @Override
-    public String findConversation(String name) {
-
-        log.info("app : {}", app);
-        log.info("token : {}", token);
-        log.info("channel : {}", channel);
-
-        var client = Slack.getInstance().methods();
-        String conversationId = "";
+    public String sendMessage(String id, String text) {
+        // you can get this instance via ctx.client() in a Bolt app
+        MethodsClient client = Slack.getInstance().methods();
+        ChatPostMessageResponse result = new ChatPostMessageResponse();
         try {
-            // Call the conversations.list method using the built-in WebClient
-            var result = client.conversationsList(r -> r
-                    // The token you used to initialize your app
-                    .token(System.getenv(token))
+            // Call the chat.postMessage method using the built-in WebClient
+            result = client.chatPostMessage(r -> r
+                            // The token you used to initialize your app
+                            .token(token)
+                            .channel(id)
+                            .text(text)
+                    // You could also use a blocks[] array to send richer content
             );
-            for (Conversation channel : result.getChannels()) {
-                if (channel.getName().equals(name)) {
-                    conversationId = channel.getId();
-                    // Print result
-                    log.info("Found conversation ID: {}", conversationId);
-                    // Break from for loop
-                    break;
-                }
-            }
+            // Print result, which includes information about the message (like TS)
+            log.info("result {}", result);
         } catch (IOException | SlackApiException e) {
             log.error("error: {}", e.getMessage(), e);
         }
-        return conversationId;
-    }
 
-    @Override
-    public String sendMessage(String id, String text) {
-        return null;
-    }
-
-    @Override
-    public String replyMessage(String id, String ts, String text) {
-        return null;
+        return result.toString();
     }
 }

@@ -12,6 +12,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -30,9 +31,12 @@ public class HttpServiceImpl implements HttpService
 {
     private static final Logger log = LogManager.getLogger(HttpServiceImpl.class);
 
-    private static final String ACCESSKEY = "lBTxXTh63tVEO4EkQwSutcbsURndQh52jQfpxOa0";
-    private static final String SECRETKEY = "jGXdrBlMrmVtJGFlA9xzktwksxDmujVD1x6XIJIU";
-    private static final String SERVERURL = "https://api.upbit.com";
+    @Value("upbit.accesskey")
+    private String ACCESSKEY;
+    @Value("upbit.secretkey")
+    private String SECRETKEY;
+    @Value("upbit.serverurl")
+    private String SERVERURL;
 
     @Override
     public Map execHttpGet(WebInfVO webInfVO)
@@ -195,7 +199,8 @@ public class HttpServiceImpl implements HttpService
                 }
                 break;
 
-            case "PUT":try {
+            case "PUT":
+                try {
                 HttpPost postRequest = new HttpPost(SERVERURL + webInfVO.getUri());
                 postRequest.setHeader("Content-Type", "application/json");
                 postRequest.addHeader("Authorization", authenticationToken);

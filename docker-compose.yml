@@ -1,0 +1,18 @@
+# 버전 정의
+version: "3"
+
+# 서비스 정의
+services:
+  myapp:
+    image: kimwonjun/crypto-server-dev:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      -../secret:/secret
+    ports:
+      -8081:8080
+
+# 네트워크 정의
+
+# 데이터 볼륨 정의

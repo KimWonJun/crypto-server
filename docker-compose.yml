@@ -9,7 +9,7 @@ services:
       context: .
       dockerfile: ./Dockerfile
     volumes:
-      -../secret:/secret
+      -../security:/security
     ports:
       -8081:8080
 

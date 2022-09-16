@@ -9,7 +9,7 @@ services:
       context: .
       dockerfile: ./Dockerfile
     volumes:
-      -../security:/security
+      -/tmp/crypto-server-dev:/security
     ports:
       -8081:8080
 

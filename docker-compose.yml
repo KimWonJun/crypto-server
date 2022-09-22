@@ -5,11 +5,12 @@ version: "3"
 services:
   myapp:
     image: kimwonjun/crypto-server-dev:latest
+    container_name: app-crypto-server-dev
     build:
       context: .
       dockerfile: ./Dockerfile
     volumes:
-      -/tmp/crypto-server-dev:/security
+      -../tmp/crypto-server-dev:/security
     ports:
       -8081:8080
 

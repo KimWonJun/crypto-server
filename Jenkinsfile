@@ -53,7 +53,10 @@ pipeline {
 									execCommand:'docker-compose down'
 								),
 								sshTransfer(
-									execCommand:'docker cp /home/ubuntu/var/lib/docker/tmp/crypto-server-dev/application-security.properties app-crypto-server-dev:/security/'
+									execCommand:'docker pull kimwonjun/crypto-server-dev:latest'
+								),
+								sshTransfer(
+									execCommand:'docker image prune'
 								),
 								sshTransfer(
 									execCommand:'docker-compose up --force-recreate --build -d'

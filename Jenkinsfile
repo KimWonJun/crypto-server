@@ -47,13 +47,13 @@ pipeline {
 							configName : 'Crypto_Dev_Server',
 							transfers : [
 								sshTransfer(
-									execCommand:'docker pull kimwonjun/crypto-server-dev:latest'
+									execCommand:'cd /home/ubuntu/var/lib/docker/tmp/crypto-server-dev'
 								),
 								sshTransfer(
-									execCommand:'docker stop app-crypto-server-dev'
+									execCommand:'docker-compose down'
 								),
 								sshTransfer(
-									execCommand:'docker rm app-crypto-server-dev'
+									execCommand:'docker cp /home/ubuntu/var/lib/docker/tmp/crypto-server-dev/application-security.properties app-crypto-server-dev:/security/'
 								),
 								sshTransfer(
 									execCommand:'docker-compose up --force-recreate --build -d'

@@ -1,18 +1,15 @@
 # 버전 정의
-version: "3"
+version: "3.9"
 
 # 서비스 정의
 services:
   myapp:
     image: kimwonjun/crypto-server-dev:latest
     container_name: app-crypto-server-dev
-    build:
-      context: .
-      dockerfile: ./Dockerfile
     volumes:
-      -../tmp/crypto-server-dev:/security
+      - /tmp/crypto-server-dev:/security
     ports:
-      -8081:8080
+      - "8081:8080"
 
 # 네트워크 정의
 

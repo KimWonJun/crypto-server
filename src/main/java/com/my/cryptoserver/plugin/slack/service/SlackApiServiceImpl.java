@@ -19,11 +19,11 @@ public class SlackApiServiceImpl implements SlackApiService
 {
     private static final Logger log = LogManager.getLogger(SlackApiServiceImpl.class);
 
-    @Value("${slack.app}")
+    @Value("slack.app")
     private String app;
-    @Value("${slack.token}")
+    @Value("slack.token")
     private String token;
-    @Value("${slack.channel}")
+    @Value("slack.channel")
     private String channel;
 
     @Override

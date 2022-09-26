@@ -40,7 +40,7 @@
 * Docker
 
 ### 빌드/배포 구성
-![InfraStructure](https://user-images.githubusercontent.com/52263410/187027818-03dbb7b6-522e-4e3c-b314-43b575fce51d.jpg)
+![InfraStructure](https://user-images.githubusercontent.com/52263410/192180472-8d54fd8c-049b-4261-bac6-056e049e75a1.jpg)
 
 ### 서비스 구성
-![ServiceConnect](https://user-images.githubusercontent.com/52263410/192180187-1a975ea6-cf46-480b-988e-9ab223cc3b3d.jpg)
+![ServiceConnect](https://user-images.githubusercontent.com/52263410/192180478-8e9c0315-2ff5-4362-b866-9e2fe456a07d.jpg)

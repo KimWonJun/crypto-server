@@ -43,4 +43,4 @@
 ![InfraStructure](https://user-images.githubusercontent.com/52263410/187027818-03dbb7b6-522e-4e3c-b314-43b575fce51d.jpg)
 
 ### 서비스 구성
-![ServiceConnect](https://user-images.githubusercontent.com/52263410/192179590-b94be914-877a-453a-93d1-901cff11f832.jpg)
+![ServiceConnect](https://user-images.githubusercontent.com/52263410/192180187-1a975ea6-cf46-480b-988e-9ab223cc3b3d.jpg)

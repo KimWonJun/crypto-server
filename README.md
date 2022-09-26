@@ -33,6 +33,14 @@
  서버
 * Amazon EC2
 * Tomcat
+* Nginx
 
-### 인프라 구성도
+ 배포
+* Jenkins
+* Docker
+
+### 빌드/배포 구성
 ![InfraStructure](https://user-images.githubusercontent.com/52263410/187027818-03dbb7b6-522e-4e3c-b314-43b575fce51d.jpg)
+
+### 서비스 구성
+![ServiceConnect](https://user-images.githubusercontent.com/52263410/192179590-b94be914-877a-453a-93d1-901cff11f832.jpg)

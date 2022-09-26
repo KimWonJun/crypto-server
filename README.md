@@ -41,3 +41,6 @@
 
 ### 빌드/배포 구성
 ![InfraStructure](https://user-images.githubusercontent.com/52263410/192180472-8d54fd8c-049b-4261-bac6-056e049e75a1.jpg)
+
+### 서비스 구성
+![ServiceConnect](https://user-images.githubusercontent.com/52263410/192182858-8ab1c1ca-2353-438f-ac58-7b70a0b713bf.jpg)

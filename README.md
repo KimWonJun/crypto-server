@@ -1,11 +1,11 @@
 # crypto-server
 
-## 암호화폐 자동거래 프로그램 서버단
+## crypto 서버단
 
 ### 설명
-업비트 API를 사용한 암호화폐 자동매매를 목적으로 하는 프로그램입니다.
-현재는 인프라 구성단계로 테스트용 코드만 작성되어 있습니다.
-백엔드와 프론트엔드 프로젝트를 각각 나눠서 개발예정입니다.
+업비트 API를 사용한 Java 웹 프로그램입니다.
+배포서버와 개발서버를 구성하여 CI/CD를 구성하였습니다.
+백엔드와 프론트엔드 프로젝트를 나눠서 개발예정입니다.
 
 ### 개발환경
  언어
@@ -33,6 +33,14 @@
  서버
 * Amazon EC2
 * Tomcat
+* Nginx
 
-### 인프라 구성도
-![InfraStructure](https://user-images.githubusercontent.com/52263410/187027818-03dbb7b6-522e-4e3c-b314-43b575fce51d.jpg)
+ 배포
+* Jenkins
+* Docker
+
+### 빌드/배포 구성
+![InfraStructure](https://user-images.githubusercontent.com/52263410/192180472-8d54fd8c-049b-4261-bac6-056e049e75a1.jpg)
+
+### 서비스 구성
+![ServiceConnect](https://user-images.githubusercontent.com/52263410/192182858-8ab1c1ca-2353-438f-ac58-7b70a0b713bf.jpg)

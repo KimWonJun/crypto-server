@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -27,6 +28,7 @@ public class UpbitApiController
      * @throws UnsupportedEncodingException
      * @throws NoSuchAlgorithmException
      */
+    @ResponseBody
     @RequestMapping(value="/account", method= RequestMethod.GET)
     public Map getAllAccounts() throws UnsupportedEncodingException, NoSuchAlgorithmException
     {
@@ -40,6 +42,7 @@ public class UpbitApiController
      * @throws UnsupportedEncodingException
      * @throws NoSuchAlgorithmException
      */
+    @ResponseBody
     @RequestMapping(value="/orderChance/{coinId}", method= RequestMethod.GET)
     public Map getOrderChance(@PathVariable String coinId) throws UnsupportedEncodingException, NoSuchAlgorithmException
     {
@@ -53,6 +56,7 @@ public class UpbitApiController
      * @throws UnsupportedEncodingException
      * @throws NoSuchAlgorithmException
      */
+    @ResponseBody
     @RequestMapping(value="/order/{coinId}", method=RequestMethod.GET)
     public Map postOrder(@PathVariable String coinId) throws UnsupportedEncodingException, NoSuchAlgorithmException
     {
@@ -63,6 +67,7 @@ public class UpbitApiController
      * 주문 상태 확인
      * @return
      */
+    @ResponseBody
     @RequestMapping(value="/orderStatus/{uuid}", method=RequestMethod.GET)
     public Map getOrderStatus(@PathVariable String uuid)
     {
@@ -73,12 +78,14 @@ public class UpbitApiController
      * 주문 삭제
      * @return
      */
+    @ResponseBody
     @RequestMapping(value="/order", method=RequestMethod.DELETE)
     public Map deleteOrder()
     {
         return upbitApiService.deleteOrder();
     }
 
+    @ResponseBody
     @RequestMapping(value="/getCoinPrice", method=RequestMethod.GET)
     public Map getCoinPrice() throws UnsupportedEncodingException, NoSuchAlgorithmException
     {
